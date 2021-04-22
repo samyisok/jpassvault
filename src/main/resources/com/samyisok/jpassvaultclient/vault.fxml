@@ -13,26 +13,31 @@
    <left>
       <AnchorPane prefHeight="600.0" prefWidth="300.0" style="-fx-background-color: #beb;" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="84.0" layoutY="434.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="133.0" style="-fx-background-color: #dfd;" text="Add" textAlignment="CENTER" textFill="#014d0c">
+            <Button fx:id="CreateView" layoutX="84.0" layoutY="362.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="133.0" style="-fx-background-color: #dfd;" text="Add" textAlignment="CENTER" textFill="#014d0c">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>
             </Button>
-            <PasswordField layoutX="38.0" layoutY="265.0" promptText="Password" style="-fx-background-color: #efe;">
+            <PasswordField fx:id="passwordCreate" layoutX="38.0" layoutY="290.0" promptText="Password" style="-fx-background-color: #efe;">
                <font>
                   <Font name="Segoe UI" size="18.0" />
                </font>
             </PasswordField>
-            <TextField layoutX="38.0" layoutY="215.0" promptText="Login" style="-fx-background-color: #efe;">
+            <TextField fx:id="loginCreate" layoutX="38.0" layoutY="240.0" promptText="Login\Email" style="-fx-background-color: #efe;">
                <font>
                   <Font name="Segoe UI" size="18.0" />
                </font>
             </TextField>
-            <Button layoutX="84.0" layoutY="368.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="133.0" style="-fx-background-color: #dfd;" text="Generate" textAlignment="CENTER" textFill="#014d0c">
+            <TextField fx:id="nameCreate" layoutX="38.0" layoutY="189.0" promptText="Name" style="-fx-background-color: #efe;">
                <font>
-                  <Font name="Segoe UI" size="20.0" />
+                  <Font name="Segoe UI" size="18.0" />
                </font>
-            </Button>
+            </TextField>
+            <TextField fx:id="searchViewByName" layoutX="38.0" layoutY="35.0" promptText="Search" style="-fx-background-color: #efe;">
+               <font>
+                  <Font name="Segoe UI" size="18.0" />
+               </font>
+            </TextField>
          </children>
       </AnchorPane>
    </left>
@@ -42,7 +47,42 @@
    <right>
       <AnchorPane prefHeight="600.0" prefWidth="300.0" style="-fx-background-color: #beb;" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="closeButton" layoutX="84.0" layoutY="438.0" mnemonicParsing="false" onAction="#close" prefHeight="55.0" prefWidth="133.0" style="-fx-background-color: #dfd;" text="Close" textAlignment="CENTER" textFill="#014d0c">
+            <Button fx:id="closeButton" layoutX="170.0" layoutY="14.0" mnemonicParsing="false" onAction="#close" prefHeight="55.0" prefWidth="115.0" style="-fx-background-color: #dfd;" text="Close" textAlignment="CENTER" textFill="#014d0c">
+               <font>
+                  <Font name="Segoe UI" size="20.0" />
+               </font>
+            </Button>
+            <Button fx:id="optionButton" layoutX="15.0" layoutY="14.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="115.0" style="-fx-background-color: #dfd;" text="Option" textAlignment="CENTER" textFill="#014d0c">
+               <font>
+                  <Font name="Segoe UI" size="20.0" />
+               </font>
+            </Button>
+            <PasswordField fx:id="passwordView" layoutX="37.0" layoutY="288.0" promptText="Password" style="-fx-background-color: #efe;">
+               <font>
+                  <Font name="Segoe UI" size="18.0" />
+               </font>
+            </PasswordField>
+            <TextField fx:id="loginView" layoutX="37.0" layoutY="238.0" promptText="Login\Email" style="-fx-background-color: #efe;">
+               <font>
+                  <Font name="Segoe UI" size="18.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="nameView" layoutX="37.0" layoutY="187.0" promptText="Name" style="-fx-background-color: #efe;">
+               <font>
+                  <Font name="Segoe UI" size="18.0" />
+               </font>
+            </TextField>
+            <Button fx:id="saveViewButton" layoutX="37.0" layoutY="342.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="102.0" style="-fx-background-color: #dfd;" text="Save" textAlignment="CENTER" textFill="#014d0c">
+               <font>
+                  <Font name="Segoe UI" size="20.0" />
+               </font>
+            </Button>
+            <Button fx:id="copyPassButton" layoutX="150.0" layoutY="342.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="111.0" style="-fx-background-color: #dfd;" text="Copy" textAlignment="CENTER" textFill="#014d0c">
+               <font>
+                  <Font name="Segoe UI" size="20.0" />
+               </font>
+            </Button>
+            <Button fx:id="deleteViewButton" layoutX="37.0" layoutY="410.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="224.0" style="-fx-background-color: #dfd;" text="Delete" textAlignment="CENTER" textFill="#014d0c">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>
@@ -51,6 +91,6 @@
       </AnchorPane>
    </right>
    <center>
-      <ListView prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;" BorderPane.alignment="CENTER" />
+      <ListView fx:id="listVault" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff;" stylesheets="@vault.css" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>
