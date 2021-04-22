@@ -10,18 +10,22 @@ import org.springframework.stereotype.Component;
 import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.PasswordField;
 import net.rgielen.fxweaver.core.FxmlView;
 
 @Component
-@FxmlView("/com/samyisok/jpassvaultclient/primary.fxml")
+@FxmlView("/com/samyisok/jpassvaultclient/main.fxml")
 public class MainController {
 
   @Autowired
   private ApplicationContext appContext;
 
+  @FXML
+  PasswordField unlockPassword;
 
   @FXML
-  private void switchToSecondary() throws IOException {
-    appContext.publishEvent(new StageActionEvent(new Payload("vault")));
+  private void unlock() throws IOException {
+    System.out.println("unlockPass: " + unlockPassword.getText());
+    appContext.publishEvent(new StageActionEvent(new Payload("unlock")));
   }
 }

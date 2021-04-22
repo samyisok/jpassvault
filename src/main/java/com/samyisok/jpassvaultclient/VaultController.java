@@ -13,7 +13,7 @@ import javafx.fxml.FXML;
 import net.rgielen.fxweaver.core.FxmlView;
 
 @Component
-@FxmlView("/com/samyisok/jpassvaultclient/secondary.fxml")
+@FxmlView("/com/samyisok/jpassvaultclient/vault.fxml")
 public class VaultController {
 
   @Autowired
@@ -21,7 +21,7 @@ public class VaultController {
 
 
   @FXML
-  private void switchToPrimary() throws IOException {
-    appContext.publishEvent(new StageActionEvent(new Payload("main")));
+  private void close() throws IOException {
+    appContext.publishEvent(new StageActionEvent(new Payload("exit")));
   }
 }

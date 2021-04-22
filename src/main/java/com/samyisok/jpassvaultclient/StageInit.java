@@ -27,7 +27,7 @@ public class StageInit implements ApplicationListener<StageReadyEvent> {
     @Override
     public void onApplicationEvent(StageReadyEvent event) {
         Stage stage = event.getStage();
-        stage.setScene(new Scene(fxWeaver.loadView(MainController.class), 800, 600));
+        stage.setScene(new Scene(fxWeaver.loadView(MainController.class)));
         stage.setTitle(applicationTitle);
         stage.show();
         stageHolder.setStage(stage);

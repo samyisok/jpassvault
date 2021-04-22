@@ -26,12 +26,10 @@ public class MainListener implements ApplicationListener<StageActionEvent> {
 
     System.out.println("w:" + width + " h:" + height);
 
-    if (event.getEvent().getAction().equals("vault")) {
-      stage.setScene(new Scene(fxWeaver.loadView(VaultController.class),
-          width, height));
-    } else if (event.getEvent().getAction().equals("main")) {
-      stage.setScene(new Scene(fxWeaver.loadView(MainController.class),
-          width, height));
+    if (event.getEvent().getAction().equals("unlock")) {
+      stage.setScene(new Scene(fxWeaver.loadView(VaultController.class)));
+    } else if (event.getEvent().getAction().equals("exit")) {
+      stage.setScene(new Scene(fxWeaver.loadView(MainController.class)));
     }
   }
 
