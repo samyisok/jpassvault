@@ -81,7 +81,9 @@ public class VaultController implements Initializable {
   @FXML
   void onClick() {
     String item = listVault.getSelectionModel().getSelectedItem();
-    System.out.println(item);
+    if (item == null) {
+      return;
+    }
 
     VaultContainer vaultContainer = vault.get(item);
     nameView.setText(item);
@@ -99,7 +101,6 @@ public class VaultController implements Initializable {
     VaultContainer item =
         new VaultContainer(loginCreate.getText(), passwordCreate.getText());
     vault.put(nameCreate.getText(), item);
-    System.out.println(item);
     updateSelector();
   }
 
