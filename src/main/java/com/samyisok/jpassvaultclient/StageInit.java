@@ -1,6 +1,7 @@
 package com.samyisok.jpassvaultclient;
 
 import com.samyisok.jpassvaultclient.MainApplication.StageReadyEvent;
+import com.samyisok.jpassvaultclient.controllers.MainController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;

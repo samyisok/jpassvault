@@ -1,8 +1,9 @@
-package com.samyisok.jpassvaultclient;
+package com.samyisok.jpassvaultclient.controllers;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import com.samyisok.jpassvaultclient.StageActionEvent;
 import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -13,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import net.rgielen.fxweaver.core.FxmlView;
+
 
 @Component
 @FxmlView("/com/samyisok/jpassvaultclient/vault.fxml")
