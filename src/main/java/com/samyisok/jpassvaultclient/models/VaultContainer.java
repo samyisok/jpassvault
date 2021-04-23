@@ -1,16 +1,16 @@
 package com.samyisok.jpassvaultclient.models;
 
 public class VaultContainer {
-  String password;
   String login;
+  String password;
 
   /**
    * @param password
    * @param login
    */
-  public VaultContainer(String password, String login) {
-    this.password = password;
+  public VaultContainer(String login, String password) {
     this.login = login;
+    this.password = password;
   }
 
   /**
