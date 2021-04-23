@@ -2,6 +2,7 @@ package com.samyisok.jpassvaultclient.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import com.samyisok.jpassvaultclient.StageActionEvent;
 import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
@@ -16,6 +17,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -88,7 +92,6 @@ public class VaultController implements Initializable {
   @FXML
   void create() {
     if (nameCreate.getText().isEmpty() || passwordCreate.getText().isEmpty()) {
-      System.out.println(nameCreate.getText());
       warning("Can't create record", "Fields is empty");
       return;
     }
@@ -98,6 +101,25 @@ public class VaultController implements Initializable {
     vault.put(nameCreate.getText(), item);
     System.out.println(item);
     updateSelector();
+  }
+
+  @FXML
+  void delete() {
+    String item = listVault.getSelectionModel().getSelectedItem();
+    if (item == null || item.isEmpty()) {
+      warning("Can't delete record", "Dothing to delete");
+      return;
+    }
+
+    Alert alert = new Alert(AlertType.CONFIRMATION);
+    alert.setTitle("Delete record?");
+    alert.setContentText("Data would be permanently deleted!");
+    Optional<ButtonType> result = alert.showAndWait();
+
+    if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+      vault.remove(item);
+      updateSelector();
+    }
   }
 
   void warning(String headerMessage, String message) {
