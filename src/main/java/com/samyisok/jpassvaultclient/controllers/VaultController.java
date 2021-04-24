@@ -131,4 +131,37 @@ public class VaultController implements Initializable {
 
     alert.showAndWait();
   }
+
+  @FXML
+  void save() {
+    String item = listVault.getSelectionModel().getSelectedItem();
+    if (item == null || item.isEmpty()) {
+      if (vault.containsKey(nameView.getText())) {
+        item = nameView.getText();
+      } else {
+        warning("Can't save record", "Dothing to save");
+        return;
+      }
+    }
+
+    if (nameView.getText().isEmpty() || passwordView.getText().isEmpty()) {
+      warning("Can't save record", "Fields is empty");
+      return;
+    }
+
+    Alert alert = new Alert(AlertType.CONFIRMATION);
+    alert.setTitle("Save record?");
+    alert.setContentText("Data would be permanently changed!");
+    Optional<ButtonType> result = alert.showAndWait();
+
+    if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+      VaultContainer newVaultContainer =
+          new VaultContainer(loginView.getText(), passwordView.getText());
+      String name = nameView.getText();
+      vault.remove(item);
+      vault.put(name, newVaultContainer);
+      updateSelector();
+    }
+  }
+
 }
