@@ -1,16 +1,14 @@
 package com.samyisok.jpassvaultclient.controllers;
 
 import java.io.IOException;
-
+import com.samyisok.jpassvaultclient.StageActionEvent;
+import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import net.rgielen.fxweaver.core.FxmlView;
-import com.samyisok.jpassvaultclient.StageActionEvent;
 
 @Component
 @FxmlView("/com/samyisok/jpassvaultclient/main.fxml")

@@ -1,22 +1,14 @@
 package com.samyisok.jpassvaultclient;
 
-import java.io.IOException;
-import javafx.fxml.FXMLLoader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.ApplicationEvent;
-
+import org.springframework.context.ConfigurableApplicationContext;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.Event;
 import javafx.stage.Stage;
 
 public class MainApplication extends Application {
   private ConfigurableApplicationContext applicationContext;
-
-  @Autowired
-  private StageHolder stageHolder;
 
 
   @Override

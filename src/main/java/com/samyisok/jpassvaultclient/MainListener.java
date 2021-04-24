@@ -2,6 +2,7 @@ package com.samyisok.jpassvaultclient;
 
 import com.samyisok.jpassvaultclient.controllers.MainController;
 import com.samyisok.jpassvaultclient.controllers.VaultController;
+import com.samyisok.jpassvaultclient.models.VaultLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,9 @@ public class MainListener implements ApplicationListener<StageActionEvent> {
 
   @Autowired
   StageHolder stageHolder;
+
+  @Autowired
+  VaultLoader vaultLoader;
 
   @Autowired
   FxWeaver fxWeaver;
@@ -29,6 +33,7 @@ public class MainListener implements ApplicationListener<StageActionEvent> {
     System.out.println("w:" + width + " h:" + height);
 
     if (event.getEvent().getAction().equals("unlock")) {
+      vaultLoader.load();
       stage.setScene(new Scene(fxWeaver.loadView(VaultController.class)));
     } else if (event.getEvent().getAction().equals("exit")) {
       stage.setScene(new Scene(fxWeaver.loadView(MainController.class)));

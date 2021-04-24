@@ -8,6 +8,7 @@ import com.samyisok.jpassvaultclient.StageActionEvent;
 import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
 import com.samyisok.jpassvaultclient.models.Vault;
 import com.samyisok.jpassvaultclient.models.VaultContainer;
+import com.samyisok.jpassvaultclient.models.VaultLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -35,6 +36,9 @@ public class VaultController implements Initializable {
 
   @Autowired
   Vault vault;
+
+  @Autowired
+  VaultLoader vaultLoader;
 
   @FXML
   ListView<String> listVault = new ListView<String>();
@@ -76,6 +80,8 @@ public class VaultController implements Initializable {
         FXCollections.observableArrayList(vault.keySet());
     listVault.getItems().clear();
     listVault.getItems().addAll(vaultElems);
+
+    vaultLoader.save(vault);
   }
 
   @FXML

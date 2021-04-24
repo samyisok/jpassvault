@@ -27,7 +27,7 @@ public class StageActionEvent extends ApplicationEvent {
 
   private Payload payload;
 
-  public StageActionEvent (Payload payload) {
+  public StageActionEvent(Payload payload) {
     super(payload);
     this.payload = payload;
   }
