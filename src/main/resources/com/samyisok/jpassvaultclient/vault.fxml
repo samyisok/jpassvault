@@ -9,11 +9,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.samyisok.jpassvaultclient.controllers.VaultController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" stylesheets="@buttons.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.samyisok.jpassvaultclient.controllers.VaultController">
    <left>
       <AnchorPane prefHeight="600.0" prefWidth="300.0" style="-fx-background-color: #beb;" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="CreateView" layoutX="84.0" layoutY="362.0" mnemonicParsing="false" onAction="#create" prefHeight="55.0" prefWidth="133.0" style="-fx-background-color: #dfd;" text="Create" textAlignment="CENTER" textFill="#014d0c">
+            <Button fx:id="CreateView" layoutX="84.0" layoutY="362.0" mnemonicParsing="false" onAction="#create" prefHeight="55.0" prefWidth="133.0" text="Create" textAlignment="CENTER" textFill="#014d0c">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>
@@ -47,12 +47,12 @@
    <right>
       <AnchorPane prefHeight="600.0" prefWidth="300.0" style="-fx-background-color: #beb;" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="closeButton" layoutX="170.0" layoutY="14.0" mnemonicParsing="false" onAction="#close" prefHeight="55.0" prefWidth="115.0" style="-fx-background-color: #dfd;" text="Close" textAlignment="CENTER" textFill="#014d0c">
+            <Button fx:id="closeButton" layoutX="170.0" layoutY="14.0" mnemonicParsing="false" onAction="#close" prefHeight="55.0" prefWidth="115.0" text="Close" textAlignment="CENTER" textFill="#014d0c">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>
             </Button>
-            <Button fx:id="optionButton" layoutX="15.0" layoutY="14.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="115.0" style="-fx-background-color: #dfd;" text="Option" textAlignment="CENTER" textFill="#014d0c">
+            <Button fx:id="optionButton" layoutX="15.0" layoutY="14.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="115.0" text="Option" textAlignment="CENTER" textFill="#014d0c">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>
@@ -72,17 +72,17 @@
                   <Font name="Segoe UI" size="18.0" />
                </font>
             </TextField>
-            <Button fx:id="saveViewButton" layoutX="37.0" layoutY="342.0" mnemonicParsing="false" onAction="#save" prefHeight="55.0" prefWidth="102.0" style="-fx-background-color: #dfd;" text="Save" textAlignment="CENTER" textFill="#014d0c">
+            <Button fx:id="saveViewButton" layoutX="37.0" layoutY="342.0" mnemonicParsing="false" onAction="#save" prefHeight="55.0" prefWidth="102.0" text="Save" textAlignment="CENTER" textFill="#014d0c">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>
             </Button>
-            <Button fx:id="copyPassButton" layoutX="150.0" layoutY="342.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="111.0" style="-fx-background-color: #dfd;" text="Copy" textAlignment="CENTER" textFill="#014d0c">
+            <Button fx:id="copyPassButton" layoutX="150.0" layoutY="342.0" mnemonicParsing="false" onAction="#copy" prefHeight="55.0" prefWidth="111.0" stylesheets="@buttons.css" text="Copy" textAlignment="CENTER" textFill="#014d0c">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>
             </Button>
-            <Button fx:id="deleteViewButton" layoutX="37.0" layoutY="410.0" mnemonicParsing="false" onAction="#delete" prefHeight="55.0" prefWidth="224.0" style="-fx-background-color: #dfd;" text="Delete" textAlignment="CENTER" textFill="#014d0c">
+            <Button fx:id="deleteViewButton" layoutX="37.0" layoutY="410.0" mnemonicParsing="false" onAction="#delete" prefHeight="55.0" prefWidth="224.0" text="Delete" textAlignment="CENTER" textFill="#014d0c">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>

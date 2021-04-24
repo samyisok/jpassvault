@@ -17,12 +17,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import net.rgielen.fxweaver.core.FxmlView;
 
 
@@ -162,6 +162,14 @@ public class VaultController implements Initializable {
       vault.put(name, newVaultContainer);
       updateSelector();
     }
+  }
+
+  @FXML
+  void copy() {
+    final Clipboard clipboard = Clipboard.getSystemClipboard();
+    final ClipboardContent content = new ClipboardContent();
+    content.putString(passwordView.getText());
+    clipboard.setContent(content);
   }
 
 }
