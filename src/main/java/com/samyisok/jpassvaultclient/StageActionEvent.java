@@ -35,4 +35,11 @@ public class StageActionEvent extends ApplicationEvent {
   public Payload getEvent() {
     return ((Payload) getSource());
   }
+
+  /**
+   * @return the payload
+   */
+  public Payload getPayload() {
+    return payload;
+  }
 }

@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.stream.Collectors;
 import com.google.gson.Gson;
+import com.samyisok.jpassvaultclient.crypto.AesCipher;
 import com.samyisok.jpassvaultclient.data.Options;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,9 @@ public class VaultLoader {
 
   @Autowired
   Vault vault;
+
+  @Autowired
+  AesCipher aesCipher;
 
   public String toJson(Vault vault) {
     Gson g = new Gson();
@@ -36,7 +40,9 @@ public class VaultLoader {
         FileWriter file = new FileWriter("tmp.xdb");
         BufferedWriter br = new BufferedWriter(file);
         PrintWriter pr = new PrintWriter(br)) {
-      pr.write(toJson(vault));
+      String cryptedJson = aesCipher.encrypt(toJson(vault));
+      pr.write(cryptedJson);
+      // pr.write(toJson(vault));
     } catch (Exception exception) {
       System.out
           .println("cant write file: " + exception.toString() + exception.getMessage());
@@ -48,7 +54,9 @@ public class VaultLoader {
     try (
         FileReader file = new FileReader("tmp.xdb");
         BufferedReader br = new BufferedReader(file)) {
-      Vault newVault = toObject(br.lines().collect(Collectors.joining()));
+      String cryptedJson = br.lines().collect(Collectors.joining());
+      Vault newVault = toObject(aesCipher.decrypt(cryptedJson));
+      // Vault newVault = toObject(br.lines().collect(Collectors.joining()));
       vault.putAll(newVault);
     } catch (Exception exception) {
       System.out.println("cant load file:  " + exception.getMessage());
