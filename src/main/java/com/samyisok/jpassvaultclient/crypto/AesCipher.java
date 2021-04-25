@@ -24,7 +24,7 @@ public class AesCipher {
 
   public SecretKeySpec getKey() {
     SecretKeySpec secretKey = null;
-    String myKey = "1234"; // session.getPasswordVault();
+    String myKey = session.getPasswordVault();
     byte[] key;
     try {
       key = myKey.getBytes("UTF-8");
@@ -40,47 +40,31 @@ public class AesCipher {
     return secretKey;
   }
 
-  public String encrypt(String strToEncrypt) {
-    try {
-      byte[] iv = new byte[GCM_IV_LENGTH];
-      GCMParameterSpec ivSpec = new GCMParameterSpec(GCM_TAG_LENGTH * Byte.SIZE, iv);
-      Cipher cipher = Cipher.getInstance(CIPHERMODE);
-      cipher.init(Cipher.ENCRYPT_MODE, getKey(), ivSpec);
-      byte[] ciphertext = cipher.doFinal(strToEncrypt.getBytes("UTF-8"));
-      byte[] encrypted = new byte[iv.length + ciphertext.length];
-      System.arraycopy(iv, 0, encrypted, 0, iv.length);
-      System.arraycopy(ciphertext, 0, encrypted, iv.length, ciphertext.length);
-      return Base64.getEncoder().encodeToString(encrypted);
-    } catch (Exception e) {
-      System.out.println("Error while encrypting: " + e.toString());
-    }
-    return null;
+  public String encrypt(String strToEncrypt) throws Exception {
+    byte[] iv = new byte[GCM_IV_LENGTH];
+    GCMParameterSpec ivSpec = new GCMParameterSpec(GCM_TAG_LENGTH * Byte.SIZE, iv);
+    Cipher cipher = Cipher.getInstance(CIPHERMODE);
+    cipher.init(Cipher.ENCRYPT_MODE, getKey(), ivSpec);
+    byte[] ciphertext = cipher.doFinal(strToEncrypt.getBytes("UTF-8"));
+    byte[] encrypted = new byte[iv.length + ciphertext.length];
+    System.arraycopy(iv, 0, encrypted, 0, iv.length);
+    System.arraycopy(ciphertext, 0, encrypted, iv.length, ciphertext.length);
+
+    return Base64.getEncoder().encodeToString(encrypted);
   }
 
-  public String decrypt(String strToDecrypt) {
-    try {
-      byte[] decoded = Base64.getDecoder().decode(strToDecrypt);
-      byte[] iv = Arrays.copyOfRange(decoded, 0, GCM_IV_LENGTH);
+  public String decrypt(String strToDecrypt) throws Exception {
+    byte[] decoded = Base64.getDecoder().decode(strToDecrypt);
+    byte[] iv = Arrays.copyOfRange(decoded, 0, GCM_IV_LENGTH);
+    Cipher cipher = Cipher.getInstance(CIPHERMODE);
+    GCMParameterSpec ivSpec = new GCMParameterSpec(GCM_TAG_LENGTH * Byte.SIZE, iv);
+    cipher.init(Cipher.DECRYPT_MODE, getKey(), ivSpec);
 
-      Cipher cipher = Cipher.getInstance(CIPHERMODE);
-      GCMParameterSpec ivSpec = new GCMParameterSpec(GCM_TAG_LENGTH * Byte.SIZE, iv);
-      cipher.init(Cipher.DECRYPT_MODE, getKey(), ivSpec);
+    byte[] ciphertext =
+        cipher.doFinal(decoded, GCM_IV_LENGTH, decoded.length - GCM_IV_LENGTH);
+    String cryptedString = new String(ciphertext, "UTF8");
 
-      byte[] ciphertext =
-          cipher.doFinal(decoded, GCM_IV_LENGTH, decoded.length - GCM_IV_LENGTH);
-
-      String cryptedString = new String(ciphertext, "UTF8");
-
-
-      // Cipher cipher = Cipher.getInstance(CIPHERMODE);
-      // cipher.init(Cipher.DECRYPT_MODE, getKey());
-      // String cryptedString =
-      // new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt)));
-      return cryptedString;
-    } catch (Exception e) {
-      System.out.println("Error while decrypting: " + e.toString() + e.getMessage());
-    }
-    return null;
+    return cryptedString;
   }
 
 }

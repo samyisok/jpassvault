@@ -42,7 +42,6 @@ public class VaultLoader {
         PrintWriter pr = new PrintWriter(br)) {
       String cryptedJson = aesCipher.encrypt(toJson(vault));
       pr.write(cryptedJson);
-      // pr.write(toJson(vault));
     } catch (Exception exception) {
       System.out
           .println("cant write file: " + exception.toString() + exception.getMessage());
@@ -50,23 +49,45 @@ public class VaultLoader {
   }
 
   public void load() {
-    checkIfExist();
-    try (
-        FileReader file = new FileReader("tmp.xdb");
-        BufferedReader br = new BufferedReader(file)) {
-      String cryptedJson = br.lines().collect(Collectors.joining());
-      Vault newVault = toObject(aesCipher.decrypt(cryptedJson));
-      // Vault newVault = toObject(br.lines().collect(Collectors.joining()));
+    createIfNotExist();
+    try {
+      Vault newVault = toObject(loadDecrypt());
       vault.putAll(newVault);
     } catch (Exception exception) {
       System.out.println("cant load file:  " + exception.getMessage());
     }
   }
 
-  void checkIfExist() {
+  void createIfNotExist() {
     File tempFile = new File("tmp.xdb");
     if (!tempFile.exists()) {
       save(new Vault());
+    }
+  }
+
+  public boolean vaultPasswordIsValid() {
+    File tempFile = new File("tmp.xdb");
+    if (!tempFile.exists()) {
+      return false;
+    }
+
+    try {
+      loadDecrypt();
+    } catch (Exception e) {
+      return false;
+    }
+
+    return true;
+  }
+
+  String loadDecrypt() throws Exception {
+    try (
+        FileReader file = new FileReader("tmp.xdb");
+        BufferedReader br = new BufferedReader(file)) {
+      String cryptedJson = br.lines().collect(Collectors.joining());
+      return aesCipher.decrypt(cryptedJson);
+    } catch (Exception e) {
+      throw e;
     }
   }
 }
