@@ -49,7 +49,6 @@ public class VaultLoader {
   }
 
   public void load() {
-    createIfNotExist();
     try {
       Vault newVault = toObject(loadDecrypt());
       vault.putAll(newVault);
@@ -58,11 +57,16 @@ public class VaultLoader {
     }
   }
 
-  void createIfNotExist() {
+  public void createEmptyDbIfNotExist() {
     File tempFile = new File("tmp.xdb");
     if (!tempFile.exists()) {
       save(new Vault());
     }
+  }
+
+  public boolean ifDbExists() {
+    File tempFile = new File("tmp.xdb");
+    return tempFile.exists();
   }
 
   public boolean vaultPasswordIsValid() {
