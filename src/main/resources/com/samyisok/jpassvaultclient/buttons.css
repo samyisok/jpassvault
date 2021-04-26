@@ -1,18 +1,39 @@
 .button:hover { 
-    -fx-background-color: rgb(255, 255, 255)
+    -fx-background-color: rgb(255, 255, 255);
 }
 
 .button:pressed {
-    -fx-background-color: rgb(232, 255, 221)
+    -fx-background-color: rgb(232, 255, 221);
 }
 
 .button {
-    -fx-background-color: #dfd
+    -fx-background-color: #dfd;
 }
 
 
 
-.greyButton:hover { 
+ .greyButton:hover { 
+    -fx-background-color: rgb(139, 208, 248);
+}
+
+.greyButton:pressed {
+    -fx-background-color: rgb(107, 170, 206);
+}
+
+.greyButton {
+    -fx-text-fill: white;
+    -fx-background-color: rgb(104, 189, 238);
+}
+
+
+.blueTextField {
+    -fx-background-color: rgb(139, 208, 248);
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #eee;
+}
+
+
+/* .greyButton:hover { 
     -fx-background-color: rgb(212, 212, 212)
 }
 
@@ -27,4 +48,4 @@
 
 .shadowButton {
     -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 30,0,0,4 )
-}
+} */

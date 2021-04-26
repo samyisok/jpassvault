@@ -60,6 +60,6 @@ public class SetupController {
 
   @FXML
   void options() {
-
+    appContext.publishEvent(new StageActionEvent(new Payload("options")));
   }
 }

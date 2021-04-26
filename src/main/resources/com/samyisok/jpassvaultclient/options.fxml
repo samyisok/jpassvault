@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" stylesheets="@buttons.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.samyisok.jpassvaultclient.controllers.OptionsController">
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <center>
+      <AnchorPane prefHeight="600.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="saveButton" layoutX="367.0" layoutY="437.0" mnemonicParsing="false" onAction="#saveOptions" prefHeight="55.0" prefWidth="133.0" text="Save" textAlignment="CENTER" textFill="#014d0c">
+               <font>
+                  <Font name="Segoe UI" size="20.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="greyButton" />
+                  <String fx:value="shadowButton" />
+               </styleClass>
+            </Button>
+            <Button fx:id="cancelButton" layoutX="511.0" layoutY="437.0" mnemonicParsing="false" onAction="#cancel" prefHeight="55.0" prefWidth="133.0" text="Cancel" textAlignment="CENTER" textFill="#014d0c">
+               <font>
+                  <Font name="Segoe UI" size="20.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="greyButton" />
+                  <String fx:value="shadowButton" />
+               </styleClass>
+            </Button>
+            <Button fx:id="chooseButton" layoutX="617.0" layoutY="218.0" mnemonicParsing="false" onAction="#chooseDb" prefHeight="35.0" prefWidth="133.0" text="Choose" textAlignment="CENTER" textFill="#014d0c">
+               <font>
+                  <Font name="Segoe UI" size="15.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="greyButton" />
+                  <String fx:value="shadowButton" />
+               </styleClass>
+            </Button>
+            <TextField fx:id="databasePathField" layoutX="251.0" layoutY="218.0" prefHeight="35.0" prefWidth="344.0" promptText="Database Path" styleClass="blueTextField">
+               <font>
+                  <Font name="Segoe UI" size="18.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="apiUrlField" layoutX="251.0" layoutY="283.0" prefHeight="35.0" prefWidth="500.0" promptText="Api Url" styleClass="blueTextField">
+               <font>
+                  <Font name="Segoe UI" size="18.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="tokenField" layoutX="251.0" layoutY="347.0" prefHeight="35.0" prefWidth="500.0" promptText="Token" styleClass="blueTextField">
+               <font>
+                  <Font name="Segoe UI" size="18.0" />
+               </font>
+            </TextField>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
