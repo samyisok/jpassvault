@@ -56,6 +56,10 @@ public class Options implements Serializable {
     this.pathVault = pathVault;
   }
 
+  public void setPathVaultWithDefaultName(String pathFolder) {
+    this.pathVault = Path.of(pathFolder, Options.DEFAULT_DB_NAME).toString();
+  }
+
   /**
    * @return the tokenApi
    */
@@ -82,5 +86,17 @@ public class Options implements Serializable {
    */
   public void setApiUrl(String apiUrl) {
     this.apiUrl = apiUrl;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.lang.Object#toString()
+   */
+
+  @Override
+  public String toString() {
+    return "Options [apiUrl=" + apiUrl + ", pathVault=" + pathVault + ", tokenApi="
+        + tokenApi + "]";
   }
 }
