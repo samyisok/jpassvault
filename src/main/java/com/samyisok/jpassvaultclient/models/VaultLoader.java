@@ -37,7 +37,7 @@ public class VaultLoader {
 
   public void save(Vault vault) {
     try (
-        FileWriter file = new FileWriter("tmp.xdb");
+        FileWriter file = new FileWriter(options.getFullPathVaultOrDefault().toFile());
         BufferedWriter br = new BufferedWriter(file);
         PrintWriter pr = new PrintWriter(br)) {
       String cryptedJson = aesCipher.encrypt(toJson(vault));
@@ -58,19 +58,19 @@ public class VaultLoader {
   }
 
   public void createEmptyDbIfNotExist() {
-    File tempFile = new File("tmp.xdb");
+    File tempFile = new File(options.getFullPathVaultOrDefault().toString());
     if (!tempFile.exists()) {
       save(new Vault());
     }
   }
 
   public boolean ifDbExists() {
-    File tempFile = new File("tmp.xdb");
+    File tempFile = new File(options.getFullPathVaultOrDefault().toString());
     return tempFile.exists();
   }
 
   public boolean vaultPasswordIsValid() {
-    File tempFile = new File("tmp.xdb");
+    File tempFile = new File(options.getFullPathVaultOrDefault().toString());
     if (!tempFile.exists()) {
       return false;
     }
@@ -86,7 +86,7 @@ public class VaultLoader {
 
   String loadDecrypt() throws Exception {
     try (
-        FileReader file = new FileReader("tmp.xdb");
+        FileReader file = new FileReader(options.getFullPathVaultOrDefault().toFile());
         BufferedReader br = new BufferedReader(file)) {
       String cryptedJson = br.lines().collect(Collectors.joining());
       return aesCipher.decrypt(cryptedJson);

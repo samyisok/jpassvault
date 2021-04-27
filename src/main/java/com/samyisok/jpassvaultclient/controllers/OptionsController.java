@@ -1,20 +1,29 @@
 package com.samyisok.jpassvaultclient.controllers;
 
+import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
 import com.samyisok.jpassvaultclient.StageActionEvent;
 import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
+import com.samyisok.jpassvaultclient.StageHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
+import javafx.stage.DirectoryChooser;
 import net.rgielen.fxweaver.core.FxmlView;
 
 @Component
 @FxmlView("/com/samyisok/jpassvaultclient/options.fxml")
-public class OptionsController {
+public class OptionsController implements Initializable {
 
   @Autowired
   private ApplicationContext appContext;
+
+  @Autowired
+  StageHolder stageHolder;
 
   @FXML
   TextField databasePathField;
@@ -58,9 +67,19 @@ public class OptionsController {
   // appContext.publishEvent(new StageActionEvent(new Payload("exit")));
   // }
 
+  @Override
+  public void initialize(URL location, ResourceBundle resources) {
+  }
+
+
   @FXML
   void chooseDb() {
+    DirectoryChooser directoryChooser = new DirectoryChooser();
+    directoryChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 
+    File selectedDirectory = directoryChooser.showDialog(stageHolder.getStage());
+
+    System.out.println(selectedDirectory.getAbsolutePath());
   }
 
   @FXML
