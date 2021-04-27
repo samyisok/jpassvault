@@ -108,6 +108,9 @@ public class VaultController implements Initializable {
         new VaultContainer(loginCreate.getText(), passwordCreate.getText());
     vault.put(nameCreate.getText(), item);
     updateSelector();
+    nameCreate.setText(null);
+    loginCreate.setText(null);
+    passwordCreate.setText(null);
   }
 
   @FXML

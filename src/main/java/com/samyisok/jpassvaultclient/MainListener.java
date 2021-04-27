@@ -33,6 +33,7 @@ public class MainListener implements ApplicationListener<StageActionEvent> {
       vaultLoader.load();
       stage.setScene(new Scene(fxWeaver.loadView(VaultController.class)));
     } else if (event.getEvent().getAction().equals("exit")) {
+      // TODO unload vault memory
       stage.setScene(new Scene(fxWeaver.loadView(MainController.class)));
     } else if (event.getEvent().getAction().equals("options")) {
       stage.setScene(new Scene(fxWeaver.loadView(OptionsController.class)));
