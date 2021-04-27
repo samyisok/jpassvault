@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import com.samyisok.jpassvaultclient.StageActionEvent;
 import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
 import com.samyisok.jpassvaultclient.models.Vault;
@@ -43,7 +46,6 @@ public class VaultController implements Initializable {
   @FXML
   ListView<String> listVault = new ListView<String>();
 
-
   @FXML
   TextField nameView;
 
@@ -62,6 +64,9 @@ public class VaultController implements Initializable {
   @FXML
   PasswordField passwordCreate;
 
+  @FXML
+  TextField searchViewByName;
+
 
   @FXML
   void close() throws IOException {
@@ -76,12 +81,13 @@ public class VaultController implements Initializable {
   }
 
   void updateSelector() {
+    Set<String> filteredSet = vault.keySet().stream().filter(
+        el -> el.toLowerCase().contains(searchViewByName.getText().toLowerCase()))
+        .collect(Collectors.toSet());
     ObservableList<String> vaultElems =
-        FXCollections.observableArrayList(vault.keySet());
+        FXCollections.observableArrayList(filteredSet);
     listVault.getItems().clear();
     listVault.getItems().addAll(vaultElems);
-
-    vaultLoader.save(vault);
   }
 
   @FXML
@@ -108,6 +114,7 @@ public class VaultController implements Initializable {
         new VaultContainer(loginCreate.getText(), passwordCreate.getText());
     vault.put(nameCreate.getText(), item);
     updateSelector();
+    vaultLoader.save(vault);
     nameCreate.setText(null);
     loginCreate.setText(null);
     passwordCreate.setText(null);
@@ -129,6 +136,7 @@ public class VaultController implements Initializable {
     if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
       vault.remove(item);
       updateSelector();
+      vaultLoader.save(vault);
     }
   }
 
@@ -170,6 +178,7 @@ public class VaultController implements Initializable {
       vault.remove(item);
       vault.put(name, newVaultContainer);
       updateSelector();
+      vaultLoader.save(vault);
     }
   }
 
@@ -181,4 +190,9 @@ public class VaultController implements Initializable {
     clipboard.setContent(content);
   }
 
+  @FXML
+  void search() {
+    System.out.println(searchViewByName.getText());
+    updateSelector();
+  }
 }

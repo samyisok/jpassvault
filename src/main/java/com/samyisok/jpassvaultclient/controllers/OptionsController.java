@@ -2,7 +2,6 @@ package com.samyisok.jpassvaultclient.controllers;
 
 import java.io.File;
 import java.net.URL;
-import java.nio.file.Path;
 import java.util.ResourceBundle;
 import com.samyisok.jpassvaultclient.StageActionEvent;
 import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
