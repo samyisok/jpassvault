@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.util.stream.Collectors;
 import com.google.gson.Gson;
 import com.samyisok.jpassvaultclient.crypto.AesCipher;
-import com.samyisok.jpassvaultclient.data.Options;
+import com.samyisok.jpassvaultclient.domains.options.Options;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

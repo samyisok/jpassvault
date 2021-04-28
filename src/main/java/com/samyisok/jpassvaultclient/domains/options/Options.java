@@ -1,4 +1,4 @@
-package com.samyisok.jpassvaultclient.data;
+package com.samyisok.jpassvaultclient.domains.options;
 
 import java.io.Serializable;
 import java.nio.file.Path;

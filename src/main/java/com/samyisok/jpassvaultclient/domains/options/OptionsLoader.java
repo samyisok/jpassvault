@@ -1,4 +1,4 @@
-package com.samyisok.jpassvaultclient.data;
+package com.samyisok.jpassvaultclient.domains.options;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
