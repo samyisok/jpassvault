@@ -1,4 +1,4 @@
-package com.samyisok.jpassvaultclient.data;
+package com.samyisok.jpassvaultclient.domains.session;
 
 import org.springframework.stereotype.Component;
 

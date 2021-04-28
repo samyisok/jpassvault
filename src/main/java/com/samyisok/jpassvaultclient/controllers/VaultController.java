@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import com.samyisok.jpassvaultclient.StageActionEvent;
 import com.samyisok.jpassvaultclient.StageActionEvent.Payload;

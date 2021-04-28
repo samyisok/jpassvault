@@ -2,7 +2,7 @@ package com.samyisok.jpassvaultclient.controllers;
 
 import com.samyisok.jpassvaultclient.StageActionEvent;
 import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
-import com.samyisok.jpassvaultclient.data.Session;
+import com.samyisok.jpassvaultclient.domains.session.Session;
 import com.samyisok.jpassvaultclient.domains.vault.VaultLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
