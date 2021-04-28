@@ -1,4 +1,4 @@
-package com.samyisok.jpassvaultclient.models;
+package com.samyisok.jpassvaultclient.domains.vault;
 
 public class VaultContainer {
   String login;

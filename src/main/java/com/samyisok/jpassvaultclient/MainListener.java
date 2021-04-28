@@ -4,7 +4,7 @@ import com.samyisok.jpassvaultclient.controllers.MainController;
 import com.samyisok.jpassvaultclient.controllers.OptionsController;
 import com.samyisok.jpassvaultclient.controllers.SetupController;
 import com.samyisok.jpassvaultclient.controllers.VaultController;
-import com.samyisok.jpassvaultclient.models.VaultLoader;
+import com.samyisok.jpassvaultclient.domains.vault.VaultLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
