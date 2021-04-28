@@ -5,6 +5,7 @@ import com.samyisok.jpassvaultclient.StageActionEvent;
 import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
 import com.samyisok.jpassvaultclient.domains.session.Session;
 import com.samyisok.jpassvaultclient.domains.vault.VaultLoader;
+import com.samyisok.jpassvaultclient.EventAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -41,7 +42,7 @@ public class MainController {
     session.setPasswordVault(password);
 
     if (vaultLoader.vaultPasswordIsValid()) {
-      appContext.publishEvent(new StageActionEvent(new Payload("unlock")));
+      appContext.publishEvent(new StageActionEvent(new Payload(EventAction.UNLOCK)));
     } else {
       session.setPasswordVault(null);
       warning("Wrong password!", "Try again!");

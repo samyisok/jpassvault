@@ -8,6 +8,7 @@ import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
 import com.samyisok.jpassvaultclient.StageHolder;
 import com.samyisok.jpassvaultclient.domains.options.Options;
 import com.samyisok.jpassvaultclient.domains.options.OptionsLoader;
+import com.samyisok.jpassvaultclient.EventAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -73,12 +74,14 @@ public class OptionsController implements Initializable {
     options.setTokenApi(tokenField.getText());
     options.setPathVault(databasePathField.getText());
     optionsLoader.save(options);
-    appContext.publishEvent(new StageActionEvent(new Payload("cancelFromOptions")));
+    appContext.publishEvent(
+        new StageActionEvent(new Payload(EventAction.CANCEL_FROM_OPTIONS)));
   }
 
   @FXML
   void cancel() {
-    appContext.publishEvent(new StageActionEvent(new Payload("cancelFromOptions")));
+    appContext.publishEvent(
+        new StageActionEvent(new Payload(EventAction.CANCEL_FROM_OPTIONS)));
   }
 
 }

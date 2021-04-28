@@ -29,15 +29,15 @@ public class MainListener implements ApplicationListener<StageActionEvent> {
     System.out.println("Received spring custom event: " + event.getEvent().action);
     Stage stage = stageHolder.getStage();
 
-    if (event.getEvent().getAction().equals("unlock")) {
+    if (event.getEvent().getAction() == EventAction.UNLOCK) {
       vaultLoader.load();
       stage.setScene(new Scene(fxWeaver.loadView(VaultController.class)));
-    } else if (event.getEvent().getAction().equals("exit")) {
+    } else if (event.getEvent().getAction() == EventAction.LOCK) {
       // TODO unload vault memory
       stage.setScene(new Scene(fxWeaver.loadView(MainController.class)));
-    } else if (event.getEvent().getAction().equals("options")) {
+    } else if (event.getEvent().getAction() == EventAction.OPTIONS) {
       stage.setScene(new Scene(fxWeaver.loadView(OptionsController.class)));
-    } else if (event.getEvent().getAction().equals("cancelFromOptions")) {
+    } else if (event.getEvent().getAction() == EventAction.CANCEL_FROM_OPTIONS) {
       if (vaultLoader.ifDbExists()) {
         stage.setScene(new Scene(fxWeaver.loadView(MainController.class)));
       } else {

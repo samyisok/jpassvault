@@ -4,23 +4,23 @@ import org.springframework.context.ApplicationEvent;
 
 public class StageActionEvent extends ApplicationEvent {
   public static class Payload {
-    String action;
+    EventAction action;
 
-    public Payload(String action) {
+    public Payload(EventAction action) {
       this.action = action;
     }
 
     /**
      * @return the action
      */
-    public String getAction() {
+    public EventAction getAction() {
       return action;
     }
 
     /**
      * @param action the action to set
      */
-    public void setAction(String action) {
+    public void setAction(EventAction action) {
       this.action = action;
     }
   }

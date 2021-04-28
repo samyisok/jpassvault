@@ -11,6 +11,7 @@ import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
 import com.samyisok.jpassvaultclient.domains.vault.Vault;
 import com.samyisok.jpassvaultclient.domains.vault.VaultContainer;
 import com.samyisok.jpassvaultclient.domains.vault.VaultLoader;
+import com.samyisok.jpassvaultclient.EventAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -70,7 +71,7 @@ public class VaultController implements Initializable {
   @FXML
   void close() throws IOException {
     System.out.println("listVault: " + listVault.getItems());
-    appContext.publishEvent(new StageActionEvent(new Payload("exit")));
+    appContext.publishEvent(new StageActionEvent(new Payload(EventAction.LOCK)));
   }
 
 
@@ -193,5 +194,10 @@ public class VaultController implements Initializable {
   void search() {
     System.out.println(searchViewByName.getText());
     updateSelector();
+  }
+
+  @FXML
+  void options() {
+    appContext.publishEvent(new StageActionEvent(new Payload(EventAction.OPTIONS)));
   }
 }

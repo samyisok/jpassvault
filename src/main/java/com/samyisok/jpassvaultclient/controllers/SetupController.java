@@ -4,6 +4,7 @@ import com.samyisok.jpassvaultclient.StageActionEvent;
 import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
 import com.samyisok.jpassvaultclient.domains.session.Session;
 import com.samyisok.jpassvaultclient.domains.vault.VaultLoader;
+import com.samyisok.jpassvaultclient.EventAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -55,11 +56,11 @@ public class SetupController {
     session.setPasswordVault(createPassword1.getText());
     vaultLoader.createEmptyDbIfNotExist();
     session.setPasswordVault(null);
-    appContext.publishEvent(new StageActionEvent(new Payload("exit")));
+    appContext.publishEvent(new StageActionEvent(new Payload(EventAction.LOCK)));
   }
 
   @FXML
   void options() {
-    appContext.publishEvent(new StageActionEvent(new Payload("options")));
+    appContext.publishEvent(new StageActionEvent(new Payload(EventAction.OPTIONS)));
   }
 }
