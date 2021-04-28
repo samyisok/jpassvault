@@ -32,20 +32,6 @@
     -fx-prompt-text-fill: #eee;
 }
 
-
-/* .greyButton:hover { 
-    -fx-background-color: rgb(212, 212, 212)
+.check-box .box {
+    -fx-background-color: #dfd
 }
-
-.greyButton:pressed {
-    -fx-background-color: rgb(200, 200, 200)
-}
-
-.greyButton {
-    -fx-background-color: #ddd
-}
-
-
-.shadowButton {
-    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 30,0,0,4 )
-} */

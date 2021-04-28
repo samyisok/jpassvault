@@ -6,12 +6,12 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.stream.Collectors;
+import com.samyisok.jpassvaultclient.EventAction;
 import com.samyisok.jpassvaultclient.StageActionEvent;
 import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
 import com.samyisok.jpassvaultclient.domains.vault.Vault;
 import com.samyisok.jpassvaultclient.domains.vault.VaultContainer;
 import com.samyisok.jpassvaultclient.domains.vault.VaultLoader;
-import com.samyisok.jpassvaultclient.EventAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -22,6 +22,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -65,7 +66,16 @@ public class VaultController implements Initializable {
   PasswordField passwordCreate;
 
   @FXML
+  TextField passwordCreateTextField;
+
+  @FXML
   TextField searchViewByName;
+
+  @FXML
+  CheckBox showPasswordViewCheckBox;
+
+  @FXML
+  CheckBox showPasswordCreateCheckBox;
 
 
   @FXML
@@ -77,6 +87,16 @@ public class VaultController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+
+    passwordCreate.textProperty().addListener((observableValue, oldValue, newValue) -> {
+      passwordCreateTextField.setText(newValue);
+    });
+
+    passwordCreateTextField.textProperty()
+        .addListener((observableValue, oldValue, newValue) -> {
+          passwordCreate.setText(newValue);
+        });
+
     updateSelector();
   }
 
@@ -100,7 +120,7 @@ public class VaultController implements Initializable {
     VaultContainer vaultContainer = vault.get(item);
     nameView.setText(item);
     loginView.setText(vaultContainer.getLogin());
-    passwordView.setText(vaultContainer.getLogin());
+    passwordView.setText(vaultContainer.getPassword());
   }
 
   @FXML
@@ -199,5 +219,21 @@ public class VaultController implements Initializable {
   @FXML
   void options() {
     appContext.publishEvent(new StageActionEvent(new Payload(EventAction.OPTIONS)));
+  }
+
+  @FXML
+  void showPasswordView() {
+    passwordView.setVisible(showPasswordViewCheckBox.isSelected());
+  }
+
+  @FXML
+  void showPasswordCreate() {
+    passwordCreate.setVisible(!showPasswordCreateCheckBox.isSelected());
+    passwordCreateTextField.setVisible(showPasswordCreateCheckBox.isSelected());
+  }
+
+  @FXML
+  void generatePassword() {
+    System.out.println("GeneratePasswrd");
   }
 }
