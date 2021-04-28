@@ -94,4 +94,8 @@ public class VaultLoader {
       throw e;
     }
   }
+
+  public void unload() {
+    vault.clear();
+  }
 }

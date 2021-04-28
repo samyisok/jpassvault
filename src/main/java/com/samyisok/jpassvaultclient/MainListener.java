@@ -29,20 +29,32 @@ public class MainListener implements ApplicationListener<StageActionEvent> {
     System.out.println("Received spring custom event: " + event.getEvent().action);
     Stage stage = stageHolder.getStage();
 
-    if (event.getEvent().getAction() == EventAction.UNLOCK) {
-      vaultLoader.load();
-      stage.setScene(new Scene(fxWeaver.loadView(VaultController.class)));
-    } else if (event.getEvent().getAction() == EventAction.LOCK) {
-      // TODO unload vault memory
-      stage.setScene(new Scene(fxWeaver.loadView(MainController.class)));
-    } else if (event.getEvent().getAction() == EventAction.OPTIONS) {
-      stage.setScene(new Scene(fxWeaver.loadView(OptionsController.class)));
-    } else if (event.getEvent().getAction() == EventAction.CANCEL_FROM_OPTIONS) {
-      if (vaultLoader.ifDbExists()) {
+    switch (event.getEvent().getAction()) {
+      case UNLOCK:
+        vaultLoader.load();
+        stage.setScene(new Scene(fxWeaver.loadView(VaultController.class)));
+        break;
+
+      case LOCK:
+        vaultLoader.unload();
         stage.setScene(new Scene(fxWeaver.loadView(MainController.class)));
-      } else {
-        stage.setScene(new Scene(fxWeaver.loadView(SetupController.class)));
-      }
+        break;
+
+      case OPTIONS:
+        stage.setScene(new Scene(fxWeaver.loadView(OptionsController.class)));
+        break;
+
+      case CANCEL_FROM_OPTIONS:
+        if (vaultLoader.ifDbExists()) {
+          vaultLoader.unload();
+          stage.setScene(new Scene(fxWeaver.loadView(MainController.class)));
+        } else {
+          stage.setScene(new Scene(fxWeaver.loadView(SetupController.class)));
+        }
+        break;
+
+      default:
+        break;
     }
   }
 
