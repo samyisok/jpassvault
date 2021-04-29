@@ -26,7 +26,6 @@ public class MainListener implements ApplicationListener<StageActionEvent> {
 
   @Override
   public void onApplicationEvent(StageActionEvent event) {
-    System.out.println("Received spring custom event: " + event.getEvent().action);
     Stage stage = stageHolder.getStage();
 
     switch (event.getEvent().getAction()) {

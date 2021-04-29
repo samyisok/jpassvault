@@ -31,10 +31,8 @@ public class AesCipher {
       MessageDigest sha = MessageDigest.getInstance("SHA3-256");
       key = sha.digest(key);
       key = Arrays.copyOf(key, 32);
-      System.out.println(key.toString());
       secretKey = new SecretKeySpec(key, "AES");
     } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-      System.out.println("Error while encrypting: " + e.toString());
       e.printStackTrace();
     }
     return secretKey;

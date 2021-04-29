@@ -83,7 +83,6 @@ public class VaultController implements Initializable {
 
   @FXML
   void close() throws IOException {
-    System.out.println("listVault: " + listVault.getItems());
     appContext.publishEvent(new StageActionEvent(new Payload(EventAction.LOCK)));
   }
 
@@ -229,7 +228,6 @@ public class VaultController implements Initializable {
 
   @FXML
   void search() {
-    System.out.println(searchViewByName.getText());
     updateSelector();
   }
 
