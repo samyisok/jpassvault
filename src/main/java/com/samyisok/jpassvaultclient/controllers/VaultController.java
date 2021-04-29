@@ -57,6 +57,9 @@ public class VaultController implements Initializable {
   PasswordField passwordView;
 
   @FXML
+  TextField passwordViewTextField;
+
+  @FXML
   TextField nameCreate;
 
   @FXML
@@ -96,6 +99,17 @@ public class VaultController implements Initializable {
         .addListener((observableValue, oldValue, newValue) -> {
           passwordCreate.setText(newValue);
         });
+
+
+    passwordView.textProperty().addListener((observableValue, oldValue, newValue) -> {
+      passwordViewTextField.setText(newValue);
+    });
+
+    passwordViewTextField.textProperty()
+        .addListener((observableValue, oldValue, newValue) -> {
+          passwordView.setText(newValue);
+        });
+
 
     updateSelector();
   }
@@ -199,6 +213,9 @@ public class VaultController implements Initializable {
       vault.put(name, newVaultContainer);
       updateSelector();
       vaultLoader.save(vault);
+      nameView.setText(null);
+      loginView.setText(null);
+      passwordView.setText(null);
     }
   }
 
@@ -223,7 +240,8 @@ public class VaultController implements Initializable {
 
   @FXML
   void showPasswordView() {
-    passwordView.setVisible(showPasswordViewCheckBox.isSelected());
+    passwordView.setVisible(!showPasswordViewCheckBox.isSelected());
+    passwordViewTextField.setVisible(showPasswordViewCheckBox.isSelected());;
   }
 
   @FXML
