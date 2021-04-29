@@ -40,9 +40,9 @@
                </font>
             </TextField>
             <CheckBox fx:id="showPasswordCreateCheckBox" layoutX="38.0" layoutY="345.0" mnemonicParsing="false" onAction="#showPasswordCreate" text="Show password" textFill="#3a6f34" />
-            <Button fx:id="generatePasswordCreateButton" layoutX="216.0" layoutY="332.0" mnemonicParsing="false" onAction="#generatePassword" prefHeight="44.0" prefWidth="46.0" text="🔒" textAlignment="CENTER" textFill="#014d0c">
+            <Button fx:id="generatePasswordCreateButton" layoutX="209.0" layoutY="332.0" mnemonicParsing="false" onAction="#generatePassword" prefHeight="44.0" prefWidth="53.0" text="🔒" textAlignment="CENTER" textFill="#014d0c">
                <font>
-                  <Font name="Segoe UI" size="20.0" />
+                  <Font size="18.0" />
                </font>
             </Button>
             <TextField fx:id="passwordCreateTextField" layoutX="38.0" layoutY="290.0" promptText="Password" style="-fx-background-color: #efe;" visible="false">

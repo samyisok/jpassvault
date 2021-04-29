@@ -12,6 +12,7 @@ import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
 import com.samyisok.jpassvaultclient.domains.vault.Vault;
 import com.samyisok.jpassvaultclient.domains.vault.VaultContainer;
 import com.samyisok.jpassvaultclient.domains.vault.VaultLoader;
+import com.samyisok.jpassvaultclient.password.PasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -79,6 +80,9 @@ public class VaultController implements Initializable {
 
   @FXML
   CheckBox showPasswordCreateCheckBox;
+
+  @Autowired
+  PasswordGenerator passwordGenerator;
 
 
   @FXML
@@ -250,6 +254,6 @@ public class VaultController implements Initializable {
 
   @FXML
   void generatePassword() {
-    System.out.println("GeneratePasswrd");
+    passwordCreate.setText(passwordGenerator.getPassword());
   }
 }
