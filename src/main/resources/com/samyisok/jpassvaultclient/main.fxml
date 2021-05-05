@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.samyisok.jpassvaultclient.controllers.MainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.samyisok.jpassvaultclient.controllers.MainController">
    <left>
       <AnchorPane prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #beb;" BorderPane.alignment="CENTER">
          <children>
@@ -21,6 +21,11 @@
                   <Font name="Segoe UI" size="18.0" />
                </font>
             </PasswordField>
+            <Button fx:id="optionsButton" layoutX="837.0" layoutY="520.0" mnemonicParsing="false" onAction="#options" prefHeight="55.0" prefWidth="133.0" style="-fx-background-color: #dfd;" text="Options" textAlignment="CENTER" textFill="#014d0c">
+               <font>
+                  <Font name="Segoe UI" size="20.0" />
+               </font>
+            </Button>
          </children>
       </AnchorPane>
    </left>

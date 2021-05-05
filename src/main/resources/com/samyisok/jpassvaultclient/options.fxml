@@ -52,11 +52,20 @@
                   <Font name="Segoe UI" size="18.0" />
                </font>
             </TextField>
-            <TextField fx:id="tokenField" layoutX="251.0" layoutY="347.0" prefHeight="35.0" prefWidth="500.0" promptText="Token" styleClass="blueTextField">
+            <TextField fx:id="tokenField" layoutX="251.0" layoutY="347.0" prefHeight="35.0" prefWidth="344.0" promptText="Token" styleClass="blueTextField">
                <font>
                   <Font name="Segoe UI" size="18.0" />
                </font>
             </TextField>
+            <Button fx:id="checkButton" layoutX="618.0" layoutY="347.0" mnemonicParsing="false" onAction="#checkRemoteDb" prefHeight="35.0" prefWidth="133.0" text="Check remote" textAlignment="CENTER" textFill="#014d0c">
+               <font>
+                  <Font name="Segoe UI" size="15.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="greyButton" />
+                  <String fx:value="shadowButton" />
+               </styleClass>
+            </Button>
          </children>
       </AnchorPane>
    </center>

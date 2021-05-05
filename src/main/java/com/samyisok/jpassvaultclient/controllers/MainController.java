@@ -49,6 +49,11 @@ public class MainController {
     }
   }
 
+  @FXML
+  void options() {
+    appContext.publishEvent(new StageActionEvent(new Payload(EventAction.OPTIONS)));
+  }
+
   void warning(String headerMessage, String message) {
     Alert alert = new Alert(AlertType.WARNING);
     alert.setTitle("Warning");

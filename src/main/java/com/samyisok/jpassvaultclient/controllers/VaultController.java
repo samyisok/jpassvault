@@ -236,11 +236,6 @@ public class VaultController implements Initializable {
   }
 
   @FXML
-  void options() {
-    appContext.publishEvent(new StageActionEvent(new Payload(EventAction.OPTIONS)));
-  }
-
-  @FXML
   void showPasswordView() {
     passwordView.setVisible(!showPasswordViewCheckBox.isSelected());
     passwordViewTextField.setVisible(showPasswordViewCheckBox.isSelected());;
