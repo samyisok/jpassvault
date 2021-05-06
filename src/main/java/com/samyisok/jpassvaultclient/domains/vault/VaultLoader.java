@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.util.stream.Collectors;
 import com.google.gson.Gson;
 import com.samyisok.jpassvaultclient.crypto.AesCipher;
+import com.samyisok.jpassvaultclient.crypto.EncryptionException;
 import com.samyisok.jpassvaultclient.domains.options.Options;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,12 +36,20 @@ public class VaultLoader {
     return g.fromJson(json, Vault.class);
   }
 
+  String getEncryptedJsonDb(Vault vault) throws EncryptionException {
+    return aesCipher.encrypt(toJson(vault));
+  }
+
+  public String getCurrentEncryptedJsonDb() throws EncryptionException {
+    return getEncryptedJsonDb(vault);
+  }
+
   public void save(Vault vault) {
     try (
         FileWriter file = new FileWriter(options.getFullPathVaultOrDefault().toFile());
         BufferedWriter br = new BufferedWriter(file);
         PrintWriter pr = new PrintWriter(br)) {
-      String cryptedJson = aesCipher.encrypt(toJson(vault));
+      String cryptedJson = getEncryptedJsonDb(vault);
       pr.write(cryptedJson);
     } catch (Exception exception) {
       System.out
@@ -97,5 +106,36 @@ public class VaultLoader {
 
   public void unload() {
     vault.clear();
+  }
+
+  public void merge(String encriptedDb) throws MergeVaultException {
+    if (vault.isEmpty()) {
+      load();
+    }
+
+    // TODO save backup
+
+    try {
+      System.out.println("ENCRIPTED DB: " + encriptedDb);
+      String remoteDbJson = aesCipher.decrypt(encriptedDb);
+      Vault remoteDb = toObject(remoteDbJson);
+      remoteDb.forEach((key, value) -> {
+        if (vault.containsKey(key)) {
+          if (vault.get(key).equals(value)) {
+            // Already exits equals, do nothing;
+          } else {
+            // Save with another name.
+            vault.put(key + "(" + value.hashCode() + ")", value);
+          }
+        } else {
+          vault.put(key, value);
+        }
+      });
+
+    } catch (Exception e) {
+      System.out.println(e.toString() + e.getMessage());
+      e.printStackTrace();
+      throw new MergeVaultException("Critical Error");
+    }
   }
 }

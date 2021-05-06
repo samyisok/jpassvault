@@ -1,10 +1,14 @@
 package com.samyisok.jpassvaultclient;
 
+import java.net.URISyntaxException;
 import com.samyisok.jpassvaultclient.controllers.MainController;
 import com.samyisok.jpassvaultclient.controllers.OptionsController;
 import com.samyisok.jpassvaultclient.controllers.SetupController;
 import com.samyisok.jpassvaultclient.controllers.VaultController;
+import com.samyisok.jpassvaultclient.crypto.EncryptionException;
 import com.samyisok.jpassvaultclient.domains.vault.VaultLoader;
+import com.samyisok.jpassvaultclient.remote.RemoteException;
+import com.samyisok.jpassvaultclient.remote.RemoteVault;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
@@ -24,6 +28,9 @@ public class MainListener implements ApplicationListener<StageActionEvent> {
   @Autowired
   FxWeaver fxWeaver;
 
+  @Autowired
+  RemoteVault remoteVault;
+
   @Override
   public void onApplicationEvent(StageActionEvent event) {
     Stage stage = stageHolder.getStage();
@@ -35,6 +42,11 @@ public class MainListener implements ApplicationListener<StageActionEvent> {
         break;
 
       case LOCK:
+        try {
+          remoteVault.save();
+        } catch (URISyntaxException | RemoteException | EncryptionException e) {
+          System.out.println("SAVE EXCEPTION: " + e.getMessage());
+        }
         vaultLoader.unload();
         stage.setScene(new Scene(fxWeaver.loadView(MainController.class)));
         break;
