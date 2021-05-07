@@ -116,7 +116,6 @@ public class VaultLoader {
     // TODO save backup
 
     try {
-      System.out.println("ENCRIPTED DB: " + encriptedDb);
       String remoteDbJson = aesCipher.decrypt(encriptedDb);
       Vault remoteDb = toObject(remoteDbJson);
       remoteDb.forEach((key, value) -> {
@@ -134,8 +133,7 @@ public class VaultLoader {
 
     } catch (Exception e) {
       System.out.println(e.toString() + e.getMessage());
-      e.printStackTrace();
-      throw new MergeVaultException("Critical Error");
+      throw new MergeVaultException("Critical Error when merging");
     }
   }
 }

@@ -92,7 +92,7 @@ public class OptionsController implements Initializable {
   @FXML
   void checkRemoteDb() {
     try {
-      // TODO make loader
+      // TODO make visual loader bar
       boolean status =
           remoteVault.checkHostAndToken(apiUrlField.getText(), tokenField.getText());
       if (status == true) {
