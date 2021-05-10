@@ -42,7 +42,6 @@ public class MainController {
   void unlock() throws IOException {
     // TODO auto lock
     validatePassword();
-    System.out.println("unlockPass: " + unlockPassword.getText());
   }
 
   void validatePassword() {

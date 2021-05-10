@@ -19,9 +19,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RemoteVault implements RemotableVault {
-  final String filesPath = "files";
-  final String lastPath = "files/last";
-  final String checkPath = "check";
+  final static String FILES_PATH = "files";
+  final static String LAST_PATH = "files/last";
+  final static String CHECK_PATH = "check";
+  final static String HASH_PATH = "files/last/checksum";
 
 
   @Autowired
@@ -36,7 +37,15 @@ public class RemoteVault implements RemotableVault {
   @Override
   public void load()
       throws URISyntaxException, RemoteException, MergeVaultException {
-    URI url = new URI((options.getApiUrl() + lastPath));
+    try {
+      if (ifRemoteIsEmpty()) {
+        return;
+      }
+    } catch (IOException | InterruptedException e1) {
+      throw new RemoteException("Error when check remote db");
+    }
+
+    URI url = new URI((options.getApiUrl() + LAST_PATH));
     try {
       String body = getRequest(url.toString(), options.getTokenApi());
       Gson g = new Gson();
@@ -53,7 +62,7 @@ public class RemoteVault implements RemotableVault {
   @Override
   public void save() throws URISyntaxException, RemoteException, EncryptionException {
     try {
-      URI url = new URI((options.getApiUrl() + filesPath));
+      URI url = new URI((options.getApiUrl() + FILES_PATH));
       Gson g = new Gson();
       String encryptedDb = vaultLoader.getCurrentEncryptedJsonDb();
       Map<String, String> singletonMap = Map.of("file", encryptedDb);
@@ -66,13 +75,34 @@ public class RemoteVault implements RemotableVault {
   }
 
   URI getUri() throws URISyntaxException {
-    return new URI((options.getApiUrl() + lastPath));
+    return new URI((options.getApiUrl() + LAST_PATH));
+  }
+
+  boolean ifRemoteIsEmpty()
+      throws RemoteException, IOException, InterruptedException, URISyntaxException {
+    return getLastCheckSumHash().isEmpty();
+  }
+
+  String getLastCheckSumHash()
+      throws RemoteException, IOException, InterruptedException, URISyntaxException {
+       URI url = new URI((options.getApiUrl() + HASH_PATH));
+    String body = getRequest(url.toString(), options.getTokenApi());
+    Gson g = new Gson();
+    String hash;
+    try {
+      HashScheme hashResponse = g.fromJson(body, HashScheme.class);
+      hash = hashResponse.getHash();
+    } catch (Exception e) {
+      throw new RemoteException("invalid response");
+    }
+
+    return hash;
   }
 
   @Override
   public boolean checkHostAndToken(String host, String token)
       throws RemoteException, IOException, InterruptedException, URISyntaxException {
-    URI url = new URI((host + checkPath));
+    URI url = new URI((host + CHECK_PATH));
     String body = getRequest(url.toString(), token);
     Gson g = new Gson();
     boolean status = false;
