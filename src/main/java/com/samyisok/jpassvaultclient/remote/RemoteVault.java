@@ -175,14 +175,10 @@ public class RemoteVault implements RemotableVault {
         .POST(HttpRequest.BodyPublishers.ofString(payload))
         .build();
 
-    System.out
-        .println(
-            "POST REQUEST: " + request.toString() + ":" + payload);
+    //TODO log it
 
     HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-    System.out
-        .println(
-            "POST RESPONSE: " + response.toString() + ":" + response.body().toString());
+
 
     return response.body().toString();
   }
@@ -203,9 +199,8 @@ public class RemoteVault implements RemotableVault {
         .build();
 
     HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-    System.out
-        .println(
-            "GET RESPONSE: " + response.toString() + ":" + response.body().toString());
+    //TODO log it
+
     return response.body().toString();
   }
 
