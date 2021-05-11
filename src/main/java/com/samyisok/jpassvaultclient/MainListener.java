@@ -6,6 +6,7 @@ import com.samyisok.jpassvaultclient.controllers.OptionsController;
 import com.samyisok.jpassvaultclient.controllers.SetupController;
 import com.samyisok.jpassvaultclient.controllers.VaultController;
 import com.samyisok.jpassvaultclient.crypto.EncryptionException;
+import com.samyisok.jpassvaultclient.domains.vault.MergeVaultException;
 import com.samyisok.jpassvaultclient.domains.vault.VaultLoader;
 import com.samyisok.jpassvaultclient.remote.RemoteException;
 import com.samyisok.jpassvaultclient.remote.RemoteVault;
@@ -38,6 +39,13 @@ public class MainListener implements ApplicationListener<StageActionEvent> {
     switch (event.getEvent().getAction()) {
       case UNLOCK:
         vaultLoader.load();
+        try {
+          if (remoteVault.isAvailible()){
+            remoteVault.load();
+          }
+        } catch (URISyntaxException | RemoteException | MergeVaultException e1) {
+          e1.printStackTrace();
+        }
         stage.setScene(new Scene(fxWeaver.loadView(VaultController.class)));
         break;
 

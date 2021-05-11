@@ -38,11 +38,14 @@ public class RemoteVault implements RemotableVault {
   public void load()
       throws URISyntaxException, RemoteException, MergeVaultException {
     try {
-      if (ifRemoteIsEmpty()) {
+      if (ifRemoteIsEmptyOrMatchesCurrentVault()) {
         return;
       }
     } catch (IOException | InterruptedException e1) {
       throw new RemoteException("Error when check remote db");
+    } catch (EncryptionException e) {
+      // TODO log it
+      e.printStackTrace();
     }
 
     URI url = new URI((options.getApiUrl() + LAST_PATH));
@@ -82,9 +85,19 @@ public class RemoteVault implements RemotableVault {
     return new URI((options.getApiUrl() + LAST_PATH));
   }
 
-  boolean ifRemoteIsEmpty()
-      throws RemoteException, IOException, InterruptedException, URISyntaxException {
-    return getLastCheckSumHash().isEmpty();
+  boolean ifRemoteIsEmptyOrMatchesCurrentVault() throws EncryptionException,
+      RemoteException, IOException, InterruptedException, URISyntaxException {
+    String remoteChecksum = getLastCheckSumHash();
+
+    if (remoteChecksum.isEmpty()){
+      return true;
+    }
+
+    if (remoteChecksum.equals(vaultLoader.getVaultEncryptCheckSum())){
+      return true;
+    }
+
+    return false;
   }
 
   boolean ifChecksumMatches() {

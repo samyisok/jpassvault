@@ -49,15 +49,9 @@ public class MainController {
     session.setPasswordVault(password);
 
     if (vaultLoader.vaultPasswordIsValid()) {
-      try {
-        if ( remoteVault.isAvailible() ) {
-          remoteVault.load();
-        } else {
-          warning("Remote vault is not availible", "Please check internet connection or remote vault settings.");
-        }
-      } catch (URISyntaxException | RemoteException | MergeVaultException e) {
-        warning("Error when loading from remote location:" + e.getMessage(),
-            e.toString());
+      if (!remoteVault.isAvailible()) {
+        warning("Remote vault is not availible",
+            "Please check internet connection or remote vault settings.");
       }
       appContext.publishEvent(new StageActionEvent(new Payload(EventAction.UNLOCK)));
     } else {
