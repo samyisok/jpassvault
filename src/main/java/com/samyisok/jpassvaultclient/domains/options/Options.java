@@ -12,6 +12,8 @@ public class Options implements Serializable {
           .toString();
   public static final String DEFAULT_DB_NAME = "jpassdb.xdb";
   public static final String DEFAULT_SETTINGS_FILE_NAME = "config.json";
+  public static final String DEFAULT_DB_BACKUP_NAME = "jpassdb.bak.xdb";
+  public static final String DEFAULT_BACKUP_FOLDER = DEFAULT_FOLDER;
   private String pathVault;
   private String tokenApi;
   private String apiUrl;
@@ -19,6 +21,10 @@ public class Options implements Serializable {
 
   public static Path getFullDefaultVaultPath() {
     return Path.of(DEFAULT_FOLDER, DEFAULT_DB_NAME);
+  }
+
+  public static Path getFullDefaultBackupVaultPath() {
+    return Path.of(DEFAULT_BACKUP_FOLDER, DEFAULT_DB_BACKUP_NAME);
   }
 
   public static Path getFullDefaultSettingsPath() {

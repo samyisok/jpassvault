@@ -55,7 +55,6 @@ public class OptionsController implements Initializable {
     update();
   }
 
-
   @FXML
   void chooseDb() {
     DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -63,8 +62,10 @@ public class OptionsController implements Initializable {
 
     File selectedDirectory = directoryChooser.showDialog(stageHolder.getStage());
 
-    options.setPathVaultWithDefaultName(selectedDirectory.getAbsolutePath());
-    databasePathField.setText(options.getPathVault());
+    if(selectedDirectory != null){
+      options.setPathVaultWithDefaultName(selectedDirectory.getAbsolutePath());
+      databasePathField.setText(options.getPathVault());
+    }
   }
 
   void update() {

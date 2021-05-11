@@ -28,3 +28,8 @@ And will use another separate masterkey when vault first created.
 
 Installation proceeds with according principle *BYDY* - Build Yourself, Deploy Yourself.
 
+# Settings
+
+Folder for backup vault and db placed in app folder of user's home folder.
+Backup Db will be saved each time when app make merges db from online sync.
+

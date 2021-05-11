@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.nio.file.Path;
 import java.util.stream.Collectors;
 import com.google.gson.Gson;
 import com.samyisok.jpassvaultclient.crypto.AesCipher;
@@ -44,9 +45,17 @@ public class VaultLoader {
     return getEncryptedJsonDb(vault);
   }
 
+  void saveBackup(){
+    save(vault, Options.getFullDefaultBackupVaultPath());
+  }
+
   public void save(Vault vault) {
+    save(vault, options.getFullPathVaultOrDefault());
+  }
+
+  void save(Vault vault, Path pathToSave) {
     try (
-        FileWriter file = new FileWriter(options.getFullPathVaultOrDefault().toFile());
+        FileWriter file = new FileWriter(pathToSave.toFile());
         BufferedWriter br = new BufferedWriter(file);
         PrintWriter pr = new PrintWriter(br)) {
       String cryptedJson = getEncryptedJsonDb(vault);
@@ -113,7 +122,7 @@ public class VaultLoader {
       load();
     }
 
-    // TODO save backup
+    saveBackup();
 
     try {
       String remoteDbJson = aesCipher.decrypt(encriptedDb);
