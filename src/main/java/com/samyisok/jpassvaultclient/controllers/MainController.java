@@ -1,14 +1,11 @@
 package com.samyisok.jpassvaultclient.controllers;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import com.samyisok.jpassvaultclient.EventAction;
 import com.samyisok.jpassvaultclient.StageActionEvent;
 import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
 import com.samyisok.jpassvaultclient.domains.session.Session;
-import com.samyisok.jpassvaultclient.domains.vault.MergeVaultException;
 import com.samyisok.jpassvaultclient.domains.vault.VaultLoader;
-import com.samyisok.jpassvaultclient.remote.RemoteException;
 import com.samyisok.jpassvaultclient.remote.RemoteVault;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
