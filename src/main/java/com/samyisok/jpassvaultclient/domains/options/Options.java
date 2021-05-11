@@ -105,4 +105,11 @@ public class Options implements Serializable {
     return "Options [apiUrl=" + apiUrl + ", pathVault=" + pathVault + ", tokenApi="
         + tokenApi + "]";
   }
+
+  public boolean ifOnlineSyncOn(){
+    if ( getApiUrl().isEmpty() || getTokenApi().isEmpty()) {
+      return false;
+    }
+    return true;
+  }
 }

@@ -203,6 +203,4 @@ public class RemoteVault implements RemotableVault {
 
     return response.body().toString();
   }
-
-
 }

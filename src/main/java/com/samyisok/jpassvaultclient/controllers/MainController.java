@@ -4,6 +4,7 @@ import java.io.IOException;
 import com.samyisok.jpassvaultclient.EventAction;
 import com.samyisok.jpassvaultclient.StageActionEvent;
 import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
+import com.samyisok.jpassvaultclient.domains.options.Options;
 import com.samyisok.jpassvaultclient.domains.session.Session;
 import com.samyisok.jpassvaultclient.domains.vault.VaultLoader;
 import com.samyisok.jpassvaultclient.remote.RemoteVault;
@@ -35,6 +36,9 @@ public class MainController {
   @Autowired
   RemoteVault remoteVault;
 
+  @Autowired
+  Options options;
+
   @FXML
   void unlock() throws IOException {
     // TODO auto lock
@@ -46,9 +50,11 @@ public class MainController {
     session.setPasswordVault(password);
 
     if (vaultLoader.vaultPasswordIsValid()) {
-      if (!remoteVault.isAvailible()) {
-        warning("Remote vault is not availible",
-            "Please check internet connection or remote vault settings.");
+      if (options.ifOnlineSyncOn()) {
+        if (!remoteVault.isAvailible()) {
+          warning("Remote vault is not availible",
+              "Please check internet connection or remote vault settings.");
+        }
       }
       appContext.publishEvent(new StageActionEvent(new Payload(EventAction.UNLOCK)));
     } else {

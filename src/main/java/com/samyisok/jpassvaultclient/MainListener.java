@@ -6,6 +6,7 @@ import com.samyisok.jpassvaultclient.controllers.OptionsController;
 import com.samyisok.jpassvaultclient.controllers.SetupController;
 import com.samyisok.jpassvaultclient.controllers.VaultController;
 import com.samyisok.jpassvaultclient.crypto.EncryptionException;
+import com.samyisok.jpassvaultclient.domains.options.Options;
 import com.samyisok.jpassvaultclient.domains.vault.MergeVaultException;
 import com.samyisok.jpassvaultclient.domains.vault.VaultLoader;
 import com.samyisok.jpassvaultclient.remote.RemoteException;
@@ -32,6 +33,9 @@ public class MainListener implements ApplicationListener<StageActionEvent> {
   @Autowired
   RemoteVault remoteVault;
 
+  @Autowired
+  Options options;
+
   @Override
   public void onApplicationEvent(StageActionEvent event) {
     Stage stage = stageHolder.getStage();
@@ -39,21 +43,25 @@ public class MainListener implements ApplicationListener<StageActionEvent> {
     switch (event.getEvent().getAction()) {
       case UNLOCK:
         vaultLoader.load();
-        try {
-          if (remoteVault.isAvailible()){
-            remoteVault.load();
+        if (options.ifOnlineSyncOn()) {
+          try {
+            if (remoteVault.isAvailible()) {
+              remoteVault.load();
+            }
+          } catch (URISyntaxException | RemoteException | MergeVaultException e1) {
+            e1.printStackTrace();
           }
-        } catch (URISyntaxException | RemoteException | MergeVaultException e1) {
-          e1.printStackTrace();
         }
         stage.setScene(new Scene(fxWeaver.loadView(VaultController.class)));
         break;
 
       case LOCK:
-        try {
-          remoteVault.save();
-        } catch (URISyntaxException | RemoteException | EncryptionException e) {
-          System.out.println("SAVE EXCEPTION: " + e.getMessage());
+        if (options.ifOnlineSyncOn()) {
+          try {
+            remoteVault.save();
+          } catch (URISyntaxException | RemoteException | EncryptionException e) {
+            System.out.println("SAVE EXCEPTION: " + e.getMessage());
+          }
         }
         vaultLoader.unload();
         stage.setScene(new Scene(fxWeaver.loadView(MainController.class)));
