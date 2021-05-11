@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.stream.Collectors;
 import com.google.gson.Gson;
 import com.samyisok.jpassvaultclient.crypto.AesCipher;
@@ -45,7 +47,7 @@ public class VaultLoader {
     return getEncryptedJsonDb(vault);
   }
 
-  void saveBackup(){
+  void saveBackup() {
     save(vault, Options.getFullDefaultBackupVaultPath());
   }
 
@@ -64,6 +66,29 @@ public class VaultLoader {
       System.out
           .println("cant write file: " + exception.toString() + exception.getMessage());
     }
+  }
+
+  public String getVaultEncryptCheckSum() throws EncryptionException {
+    String cryptedJson = getEncryptedJsonDb(vault);
+    MessageDigest md;
+    try {
+      md = MessageDigest.getInstance("MD5");
+      md.update(cryptedJson.getBytes());
+      byte[] digest = md.digest();
+      String checksum = bytesToHex(digest).toUpperCase();
+      return checksum;
+    } catch (NoSuchAlgorithmException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  String bytesToHex(byte[] bytes) {
+    StringBuilder sb = new StringBuilder();
+    for (byte b : bytes) {
+      sb.append(String.format("%02x", b));
+    }
+    return sb.toString();
   }
 
   public void load() {

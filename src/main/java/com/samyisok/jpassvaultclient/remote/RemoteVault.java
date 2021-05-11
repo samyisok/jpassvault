@@ -61,6 +61,10 @@ public class RemoteVault implements RemotableVault {
 
   @Override
   public void save() throws URISyntaxException, RemoteException, EncryptionException {
+    if( ifChecksumMatches() ){
+      return;
+    }
+
     try {
       URI url = new URI((options.getApiUrl() + FILES_PATH));
       Gson g = new Gson();
@@ -81,6 +85,21 @@ public class RemoteVault implements RemotableVault {
   boolean ifRemoteIsEmpty()
       throws RemoteException, IOException, InterruptedException, URISyntaxException {
     return getLastCheckSumHash().isEmpty();
+  }
+
+  boolean ifChecksumMatches() {
+    String remoteChecksum;
+    String localChecksum;
+
+    try {
+      remoteChecksum = getLastCheckSumHash();
+      localChecksum = vaultLoader.getVaultEncryptCheckSum();
+    } catch (RemoteException | IOException | InterruptedException
+        | URISyntaxException | EncryptionException e) {
+      return false;
+    }
+
+    return localChecksum.equals(remoteChecksum);
   }
 
   String getLastCheckSumHash()
