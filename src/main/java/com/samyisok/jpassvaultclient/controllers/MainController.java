@@ -50,7 +50,11 @@ public class MainController {
 
     if (vaultLoader.vaultPasswordIsValid()) {
       try {
-        remoteVault.load();
+        if ( remoteVault.isAvailible() ) {
+          remoteVault.load();
+        } else {
+          warning("Remote vault is not availible", "Please check internet connection or remote vault settings.");
+        }
       } catch (URISyntaxException | RemoteException | MergeVaultException e) {
         warning("Error when loading from remote location:" + e.getMessage(),
             e.toString());

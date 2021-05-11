@@ -85,7 +85,7 @@ public class RemoteVault implements RemotableVault {
 
   String getLastCheckSumHash()
       throws RemoteException, IOException, InterruptedException, URISyntaxException {
-       URI url = new URI((options.getApiUrl() + HASH_PATH));
+    URI url = new URI((options.getApiUrl() + HASH_PATH));
     String body = getRequest(url.toString(), options.getTokenApi());
     Gson g = new Gson();
     String hash;
@@ -97,6 +97,16 @@ public class RemoteVault implements RemotableVault {
     }
 
     return hash;
+  }
+
+  @Override
+  public boolean isAvailible() {
+    try {
+      return checkHostAndToken(options.getApiUrl(), options.getTokenApi());
+    } catch (RemoteException | IOException | InterruptedException
+        | URISyntaxException e) {
+      return false;
+    }
   }
 
   @Override

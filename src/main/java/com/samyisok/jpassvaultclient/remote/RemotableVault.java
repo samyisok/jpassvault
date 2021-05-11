@@ -10,6 +10,8 @@ public interface RemotableVault {
 
   public void save() throws URISyntaxException, RemoteException, EncryptionException;
 
+  public boolean isAvailible();
+
   public boolean checkHostAndToken(String host, String token)
       throws RemoteException, IOException, InterruptedException, URISyntaxException;
 }
