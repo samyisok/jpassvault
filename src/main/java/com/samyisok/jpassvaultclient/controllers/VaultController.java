@@ -7,15 +7,11 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.stream.Collectors;
 import com.samyisok.jpassvaultclient.EventAction;
-import com.samyisok.jpassvaultclient.StageActionEvent;
-import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
+import com.samyisok.jpassvaultclient.EventPublisher;
 import com.samyisok.jpassvaultclient.domains.vault.Vault;
 import com.samyisok.jpassvaultclient.domains.vault.VaultContainer;
 import com.samyisok.jpassvaultclient.domains.vault.VaultLoader;
 import com.samyisok.jpassvaultclient.password.PasswordGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -29,21 +25,15 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import net.rgielen.fxweaver.core.FxmlView;
 
-
-@Component
-@FxmlView("/com/samyisok/jpassvaultclient/vault.fxml")
 public class VaultController implements Initializable {
 
-  @Autowired
-  private ApplicationContext appContext;
+  public static final String FXML_PATH = "/com/samyisok/jpassvaultclient/vault.fxml";
 
-  @Autowired
-  Vault vault;
-
-  @Autowired
-  VaultLoader vaultLoader;
+  private final EventPublisher eventPublisher;
+  private final Vault vault;
+  private final VaultLoader vaultLoader;
+  private final PasswordGenerator passwordGenerator;
 
   @FXML
   ListView<String> listVault = new ListView<String>();
@@ -81,15 +71,18 @@ public class VaultController implements Initializable {
   @FXML
   CheckBox showPasswordCreateCheckBox;
 
-  @Autowired
-  PasswordGenerator passwordGenerator;
-
+  public VaultController(EventPublisher eventPublisher, Vault vault,
+      VaultLoader vaultLoader, PasswordGenerator passwordGenerator) {
+    this.eventPublisher = eventPublisher;
+    this.vault = vault;
+    this.vaultLoader = vaultLoader;
+    this.passwordGenerator = passwordGenerator;
+  }
 
   @FXML
   void close() throws IOException {
-    appContext.publishEvent(new StageActionEvent(new Payload(EventAction.LOCK)));
+    eventPublisher.publish(EventAction.LOCK);
   }
-
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {

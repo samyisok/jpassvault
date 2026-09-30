@@ -5,31 +5,43 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.samyisok.jpassvaultclient.controllers.MainController">
-   <left>
-      <AnchorPane prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #beb;" BorderPane.alignment="CENTER">
+<!--
+   Unlock view.
+
+   Layout rules for this view:
+     - the password field and Unlock button are centred in the window, so they
+       live in a VBox that is anchored to the centre of the fill-size AnchorPane
+     - the Options button sits an equal distance (30px) from the bottom and the
+       right edge, so it is anchored to both
+
+   An earlier revision used absolute layoutX/layoutY, which pinned the controls
+   to the top-left of the 1000x600 design size and left them stranded there once
+   the window grew. Anchors are used instead so the view follows the window.
+-->
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #beb;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.samyisok.jpassvaultclient.controllers.MainController">
+   <children>
+      <VBox alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button fx:id="unlockButton" layoutX="434.0" layoutY="296.0" mnemonicParsing="false" onAction="#unlock" prefHeight="55.0" prefWidth="133.0" style="-fx-background-color: #dfd;" text="Unlock" textAlignment="CENTER" textFill="#014d0c">
-               <font>
-                  <Font name="Segoe UI" size="20.0" />
-               </font>
-            </Button>
-            <PasswordField fx:id="unlockPassword" layoutX="388.0" layoutY="250.0" onAction="#unlock" promptText="Password" style="-fx-background-color: #efe;" AnchorPane.bottomAnchor="315.0" AnchorPane.leftAnchor="388.0" AnchorPane.rightAnchor="388.0" AnchorPane.topAnchor="250.0">
+            <PasswordField fx:id="unlockPassword" maxWidth="224.0" onAction="#unlock" prefHeight="35.0" prefWidth="224.0" promptText="Password" style="-fx-background-color: #efe;">
                <font>
                   <Font name="Segoe UI" size="18.0" />
                </font>
             </PasswordField>
-            <Button fx:id="optionsButton" layoutX="837.0" layoutY="520.0" mnemonicParsing="false" onAction="#options" prefHeight="55.0" prefWidth="133.0" style="-fx-background-color: #dfd;" text="Options" textAlignment="CENTER" textFill="#014d0c">
+            <Button fx:id="unlockButton" mnemonicParsing="false" onAction="#unlock" prefHeight="55.0" prefWidth="133.0" style="-fx-background-color: #dfd;" text="Unlock" textAlignment="CENTER" textFill="#014d0c">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>
             </Button>
          </children>
-      </AnchorPane>
-   </left>
-   <opaqueInsets>
-      <Insets />
-   </opaqueInsets>
-</BorderPane>
+      </VBox>
+      <Button fx:id="optionsButton" mnemonicParsing="false" onAction="#options" prefHeight="55.0" prefWidth="133.0" style="-fx-background-color: #dfd;" text="Options" textAlignment="CENTER" textFill="#014d0c" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0">
+         <font>
+            <Font name="Segoe UI" size="20.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

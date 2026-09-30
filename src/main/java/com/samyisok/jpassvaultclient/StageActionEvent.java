@@ -1,45 +1,38 @@
 package com.samyisok.jpassvaultclient;
 
-import org.springframework.context.ApplicationEvent;
+import java.util.EnumMap;
+import java.util.Map;
+import javafx.event.Event;
+import javafx.event.EventType;
 
-public class StageActionEvent extends ApplicationEvent {
-  public static class Payload {
-    EventAction action;
+/**
+ * Scene-switching event fired on the application {@link javafx.stage.Stage}.
+ * Each {@link EventAction} has a dedicated {@link EventType} registered as a
+ * child of {@link #STAGE_ACTION}, so a single handler on the parent type
+ * receives every action.
+ */
+public class StageActionEvent extends Event {
 
-    public Payload(EventAction action) {
-      this.action = action;
-    }
+  public static final EventType<StageActionEvent> STAGE_ACTION =
+      new EventType<>("STAGE_ACTION");
 
-    /**
-     * @return the action
-     */
-    public EventAction getAction() {
-      return action;
-    }
+  private static final Map<EventAction, EventType<StageActionEvent>> ACTION_TYPES =
+      new EnumMap<>(EventAction.class);
 
-    /**
-     * @param action the action to set
-     */
-    public void setAction(EventAction action) {
-      this.action = action;
+  static {
+    for (EventAction action : EventAction.values()) {
+      ACTION_TYPES.put(action, new EventType<>(STAGE_ACTION, action.name()));
     }
   }
 
-  private Payload payload;
+  private final EventAction action;
 
-  public StageActionEvent(Payload payload) {
-    super(payload);
-    this.payload = payload;
+  public StageActionEvent(EventAction action) {
+    super(ACTION_TYPES.get(action));
+    this.action = action;
   }
 
-  public Payload getEvent() {
-    return ((Payload) getSource());
-  }
-
-  /**
-   * @return the payload
-   */
-  public Payload getPayload() {
-    return payload;
+  public EventAction getAction() {
+    return action;
   }
 }

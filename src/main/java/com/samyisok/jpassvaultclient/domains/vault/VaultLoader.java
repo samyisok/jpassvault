@@ -14,20 +14,18 @@ import com.google.gson.Gson;
 import com.samyisok.jpassvaultclient.crypto.AesCipher;
 import com.samyisok.jpassvaultclient.crypto.EncryptionException;
 import com.samyisok.jpassvaultclient.domains.options.Options;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
 public class VaultLoader {
 
-  @Autowired
-  Options options;
+  private final Options options;
+  private final Vault vault;
+  private final AesCipher aesCipher;
 
-  @Autowired
-  Vault vault;
-
-  @Autowired
-  AesCipher aesCipher;
+  public VaultLoader(Options options, Vault vault, AesCipher aesCipher) {
+    this.options = options;
+    this.vault = vault;
+    this.aesCipher = aesCipher;
+  }
 
   public String toJson(Vault vault) {
     Gson g = new Gson();

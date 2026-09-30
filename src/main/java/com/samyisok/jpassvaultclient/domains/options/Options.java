@@ -2,9 +2,7 @@ package com.samyisok.jpassvaultclient.domains.options;
 
 import java.io.Serializable;
 import java.nio.file.Path;
-import org.springframework.stereotype.Component;
 
-@Component
 public class Options implements Serializable {
   public static final String DEFAULT_APP_FOLDER_NAME = "jpassvault";
   public static final String DEFAULT_FOLDER =
@@ -37,6 +35,8 @@ public class Options implements Serializable {
 
   public void setDefaultData() {
     this.pathVault = getFullDefaultVaultPath().toString();
+    this.apiUrl = "";
+    this.tokenApi = "";
   }
 
 
@@ -107,7 +107,8 @@ public class Options implements Serializable {
   }
 
   public boolean ifOnlineSyncOn(){
-    if ( getApiUrl().isEmpty() || getTokenApi().isEmpty()) {
+    if ( getApiUrl() == null || getApiUrl().isEmpty()
+        || getTokenApi() == null || getTokenApi().isEmpty()) {
       return false;
     }
     return true;

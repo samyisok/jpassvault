@@ -2,42 +2,37 @@ package com.samyisok.jpassvaultclient.controllers;
 
 import java.io.IOException;
 import com.samyisok.jpassvaultclient.EventAction;
-import com.samyisok.jpassvaultclient.StageActionEvent;
-import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
+import com.samyisok.jpassvaultclient.EventPublisher;
 import com.samyisok.jpassvaultclient.domains.options.Options;
 import com.samyisok.jpassvaultclient.domains.session.Session;
 import com.samyisok.jpassvaultclient.domains.vault.VaultLoader;
 import com.samyisok.jpassvaultclient.remote.RemoteVault;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.PasswordField;
-import net.rgielen.fxweaver.core.FxmlView;
 
-@Component
-@FxmlView("/com/samyisok/jpassvaultclient/main.fxml")
 public class MainController {
 
-  @Autowired
-  private ApplicationContext appContext;
+  public static final String FXML_PATH = "/com/samyisok/jpassvaultclient/main.fxml";
+
+  private final EventPublisher eventPublisher;
+  private final VaultLoader vaultLoader;
+  private final Session session;
+  private final RemoteVault remoteVault;
+  private final Options options;
 
   @FXML
   PasswordField unlockPassword;
 
-  @Autowired
-  VaultLoader vaultLoader;
-
-  @Autowired
-  Session session;
-
-  @Autowired
-  RemoteVault remoteVault;
-
-  @Autowired
-  Options options;
+  public MainController(EventPublisher eventPublisher, VaultLoader vaultLoader,
+      Session session, RemoteVault remoteVault, Options options) {
+    this.eventPublisher = eventPublisher;
+    this.vaultLoader = vaultLoader;
+    this.session = session;
+    this.remoteVault = remoteVault;
+    this.options = options;
+  }
 
   @FXML
   void unlock() throws IOException {
@@ -56,7 +51,7 @@ public class MainController {
               "Please check internet connection or remote vault settings.");
         }
       }
-      appContext.publishEvent(new StageActionEvent(new Payload(EventAction.UNLOCK)));
+      eventPublisher.publish(EventAction.UNLOCK);
     } else {
       session.setPasswordVault(null);
       warning("Wrong password!", "Try again!");
@@ -65,7 +60,7 @@ public class MainController {
 
   @FXML
   void options() {
-    appContext.publishEvent(new StageActionEvent(new Payload(EventAction.OPTIONS)));
+    eventPublisher.publish(EventAction.OPTIONS);
   }
 
   void warning(String headerMessage, String message) {

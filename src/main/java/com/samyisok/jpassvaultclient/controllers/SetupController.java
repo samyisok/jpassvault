@@ -1,25 +1,21 @@
 package com.samyisok.jpassvaultclient.controllers;
 
-import com.samyisok.jpassvaultclient.StageActionEvent;
-import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
+import com.samyisok.jpassvaultclient.EventAction;
+import com.samyisok.jpassvaultclient.EventPublisher;
 import com.samyisok.jpassvaultclient.domains.session.Session;
 import com.samyisok.jpassvaultclient.domains.vault.VaultLoader;
-import com.samyisok.jpassvaultclient.EventAction;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.PasswordField;
-import net.rgielen.fxweaver.core.FxmlView;
 
-@Component
-@FxmlView("/com/samyisok/jpassvaultclient/setup.fxml")
 public class SetupController {
 
-  @Autowired
-  private ApplicationContext appContext;
+  public static final String FXML_PATH = "/com/samyisok/jpassvaultclient/setup.fxml";
+
+  private final EventPublisher eventPublisher;
+  private final VaultLoader vaultLoader;
+  private final Session session;
 
   @FXML
   PasswordField createPassword1;
@@ -27,12 +23,12 @@ public class SetupController {
   @FXML
   PasswordField createPassword2;
 
-
-  @Autowired
-  VaultLoader vaultLoader;
-
-  @Autowired
-  Session session;
+  public SetupController(EventPublisher eventPublisher, VaultLoader vaultLoader,
+      Session session) {
+    this.eventPublisher = eventPublisher;
+    this.vaultLoader = vaultLoader;
+    this.session = session;
+  }
 
   void warning(String headerMessage, String message) {
     Alert alert = new Alert(AlertType.WARNING);
@@ -56,11 +52,11 @@ public class SetupController {
     session.setPasswordVault(createPassword1.getText());
     vaultLoader.createEmptyDbIfNotExist();
     session.setPasswordVault(null);
-    appContext.publishEvent(new StageActionEvent(new Payload(EventAction.LOCK)));
+    eventPublisher.publish(EventAction.LOCK);
   }
 
   @FXML
   void options() {
-    appContext.publishEvent(new StageActionEvent(new Payload(EventAction.OPTIONS)));
+    eventPublisher.publish(EventAction.OPTIONS);
   }
 }

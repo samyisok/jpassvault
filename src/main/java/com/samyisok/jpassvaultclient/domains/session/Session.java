@@ -1,8 +1,5 @@
 package com.samyisok.jpassvaultclient.domains.session;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class Session {
   private String passwordVault;
 

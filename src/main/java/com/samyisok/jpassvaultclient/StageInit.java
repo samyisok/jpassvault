@@ -3,53 +3,45 @@ package com.samyisok.jpassvaultclient;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
-import com.samyisok.jpassvaultclient.MainApplication.StageReadyEvent;
 import com.samyisok.jpassvaultclient.controllers.MainController;
 import com.samyisok.jpassvaultclient.controllers.SetupController;
 import com.samyisok.jpassvaultclient.domains.options.Options;
 import com.samyisok.jpassvaultclient.domains.options.OptionsLoader;
 import com.samyisok.jpassvaultclient.domains.vault.VaultLoader;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationListener;
-import org.springframework.stereotype.Component;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
-import net.rgielen.fxweaver.core.FxWeaver;
 
-@Component
-public class StageInit implements ApplicationListener<StageReadyEvent> {
+/**
+ * Prepares settings on first launch and selects the initial scene.
+ * Replaces the former Spring {@code ApplicationListener<StageReadyEvent>};
+ * invoked directly from the JavaFX startup path.
+ */
+public class StageInit {
     private final String applicationTitle;
-    private final FxWeaver fxWeaver;
+    private final StageHolder stageHolder;
+    private final VaultLoader vaultLoader;
+    private final OptionsLoader optionsLoader;
+    private final Options options;
+    private final ViewLoader viewLoader;
 
-    @Autowired
-    private StageHolder stageHolder;
-
-    @Autowired
-    private VaultLoader vaultLoader;
-
-    @Autowired
-    private OptionsLoader optionsLoader;
-
-    @Autowired
-    private Options options;
-
-    public StageInit(@Value("${spring.application.ui.title}") String applicationTitle,
-            FxWeaver fxWeaver) {
+    public StageInit(StageHolder stageHolder, VaultLoader vaultLoader,
+            OptionsLoader optionsLoader, Options options, ViewLoader viewLoader,
+            String applicationTitle) {
+        this.stageHolder = stageHolder;
+        this.vaultLoader = vaultLoader;
+        this.optionsLoader = optionsLoader;
+        this.options = options;
+        this.viewLoader = viewLoader;
         this.applicationTitle = applicationTitle;
-        this.fxWeaver = fxWeaver;
     }
 
-    @Override
-    public void onApplicationEvent(StageReadyEvent event) {
-        Stage stage = event.getStage();
+    public void initialize(Stage stage) {
         loadSettings();
         if (vaultLoader.ifDbExists()) {
-            stage.setScene(new Scene(fxWeaver.loadView(MainController.class)));
+            stage.setScene(viewLoader.loadScene(MainController.FXML_PATH));
         } else {
-            stage.setScene(new Scene(fxWeaver.loadView(SetupController.class)));
+            stage.setScene(viewLoader.loadScene(SetupController.FXML_PATH));
         }
         stage.setTitle(applicationTitle);
         stage.show();

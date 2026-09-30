@@ -4,38 +4,27 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import com.samyisok.jpassvaultclient.EventAction;
-import com.samyisok.jpassvaultclient.StageActionEvent;
-import com.samyisok.jpassvaultclient.StageActionEvent.Payload;
+import com.samyisok.jpassvaultclient.EventPublisher;
 import com.samyisok.jpassvaultclient.StageHolder;
 import com.samyisok.jpassvaultclient.domains.options.Options;
 import com.samyisok.jpassvaultclient.domains.options.OptionsLoader;
 import com.samyisok.jpassvaultclient.remote.RemoteVault;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
-import net.rgielen.fxweaver.core.FxmlView;
 
-@Component
-@FxmlView("/com/samyisok/jpassvaultclient/options.fxml")
 public class OptionsController implements Initializable {
 
-  @Autowired
-  private ApplicationContext appContext;
+  public static final String FXML_PATH = "/com/samyisok/jpassvaultclient/options.fxml";
 
-  @Autowired
-  Options options;
-
-  @Autowired
-  OptionsLoader optionsLoader;
-
-  @Autowired
-  StageHolder stageHolder;
+  private final EventPublisher eventPublisher;
+  private final Options options;
+  private final OptionsLoader optionsLoader;
+  private final StageHolder stageHolder;
+  private final RemoteVault remoteVault;
 
   @FXML
   TextField databasePathField;
@@ -46,9 +35,14 @@ public class OptionsController implements Initializable {
   @FXML
   TextField tokenField;
 
-  @Autowired
-  RemoteVault remoteVault;
-
+  public OptionsController(EventPublisher eventPublisher, Options options,
+      OptionsLoader optionsLoader, StageHolder stageHolder, RemoteVault remoteVault) {
+    this.eventPublisher = eventPublisher;
+    this.options = options;
+    this.optionsLoader = optionsLoader;
+    this.stageHolder = stageHolder;
+    this.remoteVault = remoteVault;
+  }
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -80,14 +74,12 @@ public class OptionsController implements Initializable {
     options.setTokenApi(tokenField.getText());
     options.setPathVault(databasePathField.getText());
     optionsLoader.save(options);
-    appContext.publishEvent(
-        new StageActionEvent(new Payload(EventAction.CANCEL_FROM_OPTIONS)));
+    eventPublisher.publish(EventAction.CANCEL_FROM_OPTIONS);
   }
 
   @FXML
   void cancel() {
-    appContext.publishEvent(
-        new StageActionEvent(new Payload(EventAction.CANCEL_FROM_OPTIONS)));
+    eventPublisher.publish(EventAction.CANCEL_FROM_OPTIONS);
   }
 
   @FXML

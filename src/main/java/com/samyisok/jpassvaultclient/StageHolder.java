@@ -1,10 +1,7 @@
 package com.samyisok.jpassvaultclient;
 
-import org.springframework.stereotype.Component;
-
 import javafx.stage.Stage;
 
-@Component
 public class StageHolder {
   private Stage stage;
 
@@ -20,5 +17,5 @@ public class StageHolder {
    */
   public void setStage(Stage stage) {
     this.stage = stage;
-  }  
+  }
 }

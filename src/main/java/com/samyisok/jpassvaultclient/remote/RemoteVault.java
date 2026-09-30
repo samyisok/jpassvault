@@ -14,25 +14,22 @@ import com.samyisok.jpassvaultclient.domains.options.Options;
 import com.samyisok.jpassvaultclient.domains.session.Session;
 import com.samyisok.jpassvaultclient.domains.vault.MergeVaultException;
 import com.samyisok.jpassvaultclient.domains.vault.VaultLoader;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
 public class RemoteVault implements RemotableVault {
   final static String FILES_PATH = "files";
   final static String LAST_PATH = "files/last";
   final static String CHECK_PATH = "check";
   final static String HASH_PATH = "files/last/checksum";
 
+  private final Options options;
+  private final Session session;
+  private final VaultLoader vaultLoader;
 
-  @Autowired
-  Options options;
-
-  @Autowired
-  Session Session;
-
-  @Autowired
-  VaultLoader vaultLoader;
+  public RemoteVault(Options options, Session session, VaultLoader vaultLoader) {
+    this.options = options;
+    this.session = session;
+    this.vaultLoader = vaultLoader;
+  }
 
   @Override
   public void load()

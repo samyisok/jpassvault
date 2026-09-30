@@ -11,36 +11,33 @@ import com.samyisok.jpassvaultclient.domains.vault.MergeVaultException;
 import com.samyisok.jpassvaultclient.domains.vault.VaultLoader;
 import com.samyisok.jpassvaultclient.remote.RemoteException;
 import com.samyisok.jpassvaultclient.remote.RemoteVault;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
-import org.springframework.stereotype.Component;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import net.rgielen.fxweaver.core.FxWeaver;
 
-@Component
-public class MainListener implements ApplicationListener<StageActionEvent> {
+/**
+ * Handles {@link StageActionEvent}s fired on the stage and swaps scenes.
+ * Replaces the former Spring {@code ApplicationListener}.
+ */
+public class MainListener {
 
-  @Autowired
-  StageHolder stageHolder;
+  private final StageHolder stageHolder;
+  private final VaultLoader vaultLoader;
+  private final ViewLoader viewLoader;
+  private final RemoteVault remoteVault;
+  private final Options options;
 
-  @Autowired
-  VaultLoader vaultLoader;
+  public MainListener(StageHolder stageHolder, VaultLoader vaultLoader,
+      ViewLoader viewLoader, RemoteVault remoteVault, Options options) {
+    this.stageHolder = stageHolder;
+    this.vaultLoader = vaultLoader;
+    this.viewLoader = viewLoader;
+    this.remoteVault = remoteVault;
+    this.options = options;
+  }
 
-  @Autowired
-  FxWeaver fxWeaver;
-
-  @Autowired
-  RemoteVault remoteVault;
-
-  @Autowired
-  Options options;
-
-  @Override
-  public void onApplicationEvent(StageActionEvent event) {
+  public void handle(StageActionEvent event) {
     Stage stage = stageHolder.getStage();
 
-    switch (event.getEvent().getAction()) {
+    switch (event.getAction()) {
       case UNLOCK:
         vaultLoader.load();
         if (options.ifOnlineSyncOn()) {
@@ -52,7 +49,7 @@ public class MainListener implements ApplicationListener<StageActionEvent> {
             e1.printStackTrace();
           }
         }
-        stage.setScene(new Scene(fxWeaver.loadView(VaultController.class)));
+        stage.setScene(viewLoader.loadScene(VaultController.FXML_PATH, ViewLoader.of(stage)));
         break;
 
       case LOCK:
@@ -64,19 +61,19 @@ public class MainListener implements ApplicationListener<StageActionEvent> {
           }
         }
         vaultLoader.unload();
-        stage.setScene(new Scene(fxWeaver.loadView(MainController.class)));
+        stage.setScene(viewLoader.loadScene(MainController.FXML_PATH, ViewLoader.of(stage)));
         break;
 
       case OPTIONS:
-        stage.setScene(new Scene(fxWeaver.loadView(OptionsController.class)));
+        stage.setScene(viewLoader.loadScene(OptionsController.FXML_PATH, ViewLoader.of(stage)));
         break;
 
       case CANCEL_FROM_OPTIONS:
         if (vaultLoader.ifDbExists()) {
           vaultLoader.unload();
-          stage.setScene(new Scene(fxWeaver.loadView(MainController.class)));
+          stage.setScene(viewLoader.loadScene(MainController.FXML_PATH, ViewLoader.of(stage)));
         } else {
-          stage.setScene(new Scene(fxWeaver.loadView(SetupController.class)));
+          stage.setScene(viewLoader.loadScene(SetupController.FXML_PATH, ViewLoader.of(stage)));
         }
         break;
 

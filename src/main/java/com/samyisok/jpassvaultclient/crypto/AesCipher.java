@@ -9,18 +9,17 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import com.samyisok.jpassvaultclient.domains.session.Session;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
 public class AesCipher {
   private final static String CIPHERMODE = "AES/GCM/NoPadding";
   private final static int GCM_IV_LENGTH = 12;
   private final static int GCM_TAG_LENGTH = 16;
 
+  private final Session session;
 
-  @Autowired
-  Session session;
+  public AesCipher(Session session) {
+    this.session = session;
+  }
 
   public SecretKeySpec getKey() {
     SecretKeySpec secretKey = null;

@@ -7,14 +7,14 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.stream.Collectors;
 import com.google.gson.Gson;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
 public class OptionsLoader {
 
-  @Autowired
-  Options options;
+  private final Options options;
+
+  public OptionsLoader(Options options) {
+    this.options = options;
+  }
 
   public String toJson(Options options) {
     Gson g = new Gson();
