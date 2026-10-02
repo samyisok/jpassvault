@@ -1,0 +1,82 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: ./mvnw -B package --file pom.xml
+      - name: Collect jar
+        shell: bash
+        run: |
+          mkdir -p dist
+          version="${GITHUB_REF_NAME#v}"
+          # shade also leaves original-<name>.jar behind; that one has no dependencies.
+          find target -maxdepth 1 -name 'jpassvaultclient-*.jar' ! -name 'original-*' -exec \
+            cp {} "dist/jpassvaultclient-${version}-${{ matrix.os }}.jar" \;
+      - name: Upload jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: jar-${{ matrix.os }}
+          path: dist/*.jar
+          if-no-files-found: error
+
+  release:
+    name: Publish GitHub release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download jars
+        uses: actions/download-artifact@v4
+        with:
+          pattern: jar-*
+          merge-multiple: true
+          path: dist
+      - name: Extract changelog notes
+        shell: bash
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          # heading is "## [2.0.0]" or "## [2.0.0] - 2026-09-30"; stop at the next version.
+          awk -v want="## [$version]" '
+            !capture && index($0, want) == 1 &&
+              (length($0) == length(want) || substr($0, length(want) + 1, 1) ~ /[ -]/) {
+              capture = 1; next
+            }
+            capture && /^## \[/ { exit }
+            capture { print }
+          ' CHANGELOG.md | sed '/./,$!d' > body.md
+          {
+            echo "## $version"
+            echo
+            if [ -s body.md ]; then cat body.md; else echo "No CHANGELOG.md section for $version."; fi
+          } > notes.md
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          body_path: notes.md
+          files: dist/*.jar
+          draft: false
