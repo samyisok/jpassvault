@@ -66,7 +66,7 @@ After a record is created successfully, the vault screen SHALL put the created r
 
 ### Requirement: Rejected creation leaves the screen untouched
 
-When a creation is rejected because the name or the password is empty, the vault screen SHALL NOT change the Search box text, the visible records, the selected record, or the record view. The screen SHALL show a warning explaining the rejection.
+When a creation is rejected because the name or the password is empty, or because a record with that name already exists, the vault screen SHALL NOT store the submitted login or password, SHALL NOT change the Search box text, the visible records, the selected record, or the record view, and SHALL show a warning explaining the rejection.
 
 #### Scenario: Empty name rejects creation without touching the screen
 
@@ -77,6 +77,11 @@ When a creation is rejected because the name or the password is empty, the vault
 
 - **WHEN** the user submits a creation with an empty password
 - **THEN** a warning is shown and the Search box, the visible records, the selected record and the record view are unchanged
+
+#### Scenario: Duplicate name warns and keeps the stored record
+
+- **WHEN** a record named "GitHub" holds password "old-password" and the user creates a record also named "GitHub" with password "new-password"
+- **THEN** a warning is shown, the stored "GitHub" still holds "old-password", and the Search box, the visible records, the selected record and the record view are unchanged
 
 ### Requirement: Editing and deleting do not rewrite the Search box
 
@@ -92,11 +97,4 @@ Saving changes to an existing record and deleting a record SHALL NOT change the 
 - **WHEN** the Search box contains "Git" and the user deletes a record
 - **THEN** the Search box still contains "Git" and the deleted record is no longer visible
 
-### Requirement: Creating a record with an existing name overwrites that record
 
-Creating a record whose name already exists SHALL replace the stored login and password for that name rather than adding a second entry, and the Search box SHALL then hold that name with the record selected.
-
-#### Scenario: Duplicate name overwrites and selects
-
-- **WHEN** a record named "GitHub" exists and the user creates a record also named "GitHub" with a different password
-- **THEN** the vault holds one record named "GitHub" with the new password, and that record is selected and visible

@@ -82,6 +82,32 @@ Two reviewers who had not written the artifacts read them against the source (ar
 
 Independently verified against source: `create()` order (`VaultController.java:137-151`), `updateSelector()` live-read, `clear()`/`addAll()` and `HashSet` order (`113-121`), `onKeyTyped="#search"` (`vault.fxml:37`), view-pane editability, `save` swallowing exceptions, ~247 lines, D3 ordering being correct given `clear()`/`addAll()`, no layering violation in placing the collaborator in `domains/vault/`, no overlap with `desktop-runtime`, and a proportionate change overall (one collaborator, two test classes, one CI line, zero new dependencies).
 
+## Verification checks — 2026-10-03 (implementation complete)
+
+### DDD Verification — 2026-10-03
+
+**Scope:** `git diff HEAD~1` (implementation commit `415b4e3`)
+**Files changed:** 12 (4 source/config, 7 planning, 1 changelog)
+**Findings:** 0
+
+No DDD violations detected. `RecordSearch.java` is pure `java.util` with real behavior (filter, ordering, post-create state), 47 lines, domain-meaningful name; `PostCreateState` is an immutable value object; `VaultController.java` is 274 of the 350-line limit; no anemic additions, no generic `*Manager`/`*Helper` names, no domain-to-persistence imports.
+
+### GRASP Verification — 2026-10-03
+
+**Scope:** `git diff HEAD~1`
+**Files changed:** 12
+**Findings:** 0
+
+No GRASP violations detected. `RecordSearch` is a deliberate Pure Fabrication and the Information Expert for matching, which the controller now delegates to; the protected dialog methods are the Missing Indirection that keeps tests off `showAndWait()`; no new type-checking dispatch; the changed controller has four injected collaborators.
+
+Observation, pre-existing and not introduced here: 15 `@FXML` controls land in `VaultController`, inherent to FXML controllers and outside this change's non-goals. Track under `extract-domain-model-from-presentation` if it is ever addressed.
+
+### Tests and OpenSpec
+
+- `./mvnw -B package` → 22 tests, 0 failures (`RecordSearchUnitTest` 7, `VaultControllerIntegrationTest` 8, `ViewLoaderUnitTest` 7), jar built.
+- `openspec validate "prefill-search-after-record-create" --strict` → valid.
+- CI on `415b4e3` → green with `xvfb-run`, so the toolkit test passed on a headless runner.
+
 ## Verification commands used
 
 - `openspec validate "prefill-search-after-record-create" --strict` → valid

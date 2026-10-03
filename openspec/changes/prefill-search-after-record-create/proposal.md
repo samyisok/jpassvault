@@ -10,7 +10,7 @@ After a record is created, the vault screen gives no feedback about where the ne
 - The filtered list is refreshed after that text is set, so the new record is the visible match rather than being hidden by a stale filter.
 - The new record is selected in the list, which loads its login and password into the view pane, ready to copy.
 - A rejected creation (empty name or empty password) leaves the Search field, the list, and the view pane untouched.
-- Creating a record whose name duplicates an existing record keeps today's behavior: the existing record is overwritten and the Search field ends up holding that name.
+- Creating a record whose name duplicates an existing record is rejected with a warning: the stored record keeps its old login and password and the screen is left untouched.
 - Editing an existing record via Save, deleting a record, and the manual Search box are unchanged.
 - The filtering rule itself does not change: still a case-insensitive substring match on the record name. Matched records are now listed in case-insensitive alphabetical order instead of an arbitrary hash order, so the list does not reshuffle on every keystroke.
 - Tests are added in two tiers: headless unit tests for the matching and post-create decisions, and one toolkit-backed integration test that loads the real `vault.fxml` and proves the wiring. The CI build step gains `xvfb-run` so that integration test has a display.

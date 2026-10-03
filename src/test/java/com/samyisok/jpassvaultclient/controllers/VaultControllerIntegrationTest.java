@@ -203,17 +203,23 @@ class VaultControllerIntegrationTest {
   }
 
   @Test
-  @DisplayName("a duplicate name overwrites the record and stays selected")
-  void duplicateNameOverwritesAndStaysSelected() throws Exception {
+  @DisplayName("a duplicate name warns, keeps the old record and touches nothing")
+  void duplicateNameWarnsAndKeepsOldRecord() throws Exception {
     vault.put("GitHub", new VaultContainer("old-login", "old-password"));
 
     fx(() -> {
+      controller.searchViewByName.setText("Git");
+      controller.updateSelector();
+      controller.listVault.getSelectionModel().select("GitHub");
+      controller.onClick();
       createRecord("GitHub", "new-login", "new-password");
 
-      assertEquals(1, vault.size());
-      assertEquals("new-password", vault.get("GitHub").getPassword());
+      assertEquals(1, controller.warnings.size());
+      assertEquals("old-password", vault.get("GitHub").getPassword());
+      assertEquals("Git", controller.searchViewByName.getText());
       assertEquals(List.of("GitHub"), items());
-      assertEquals("GitHub", controller.listVault.getSelectionModel().getSelectedItem());
+      assertEquals("old-password", controller.passwordView.getText());
+      assertEquals(0, vaultLoader.saves);
       return null;
     });
   }

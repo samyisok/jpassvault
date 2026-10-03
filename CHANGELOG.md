@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Creating a record now puts its name into the Search box, refreshes the filtered list and selects the record, so the record you just saved is the one you see — with its login and password shown and ready to copy. A search filter left over from earlier no longer hides the new record.
 - A creation rejected for an empty name or empty password leaves the screen exactly as it was: the search text, the list, the selection and the shown record are untouched.
+- Creating a record with a name that already exists now shows a warning and keeps the stored record unchanged; previously the existing record was silently overwritten.
 
 ### Changed
 

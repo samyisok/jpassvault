@@ -147,6 +147,11 @@ public class VaultController implements Initializable {
     }
 
     String createdName = nameCreate.getText();
+    if (vault.containsKey(createdName)) {
+      warning("Can't create record", "Record already exists");
+      return;
+    }
+
     vault.put(createdName,
         new VaultContainer(loginCreate.getText(), passwordCreate.getText()));
     applyState(RecordSearch.afterCreate(vault.keySet(), createdName));

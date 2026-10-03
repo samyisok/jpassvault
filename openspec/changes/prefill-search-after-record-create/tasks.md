@@ -20,11 +20,12 @@
 
 ## 3. CI display
 
-- [ ] 3.1 Wrap the build step in `.github/workflows/maven.yml` with `xvfb-run` so the integration test has a display (design D5), and verify a push runs the workflow green end to end
+- [x] 3.1 Wrap the build step in `.github/workflows/maven.yml` with `xvfb-run` so the integration test has a display (design D5), and verify a push runs the workflow green end to end
 
 ## 4. Documentation and full verification
 
 - [x] 4.1 Add bullets under the existing `## [Unreleased]` heading in `CHANGELOG.md` covering the after-create behavior and the now-alphabetical record list, and verify it renders under the existing Keep a Changelog headings
 - [x] 4.2 Run `./mvnw -B package` and verify the whole suite is green and the jar builds
+- [x] 2.8 Duplicate-name fix (requested after smoke): spec scenario changed from "overwrites" to "warns and keeps the stored record", write the failing integration case first (warning recorded, old password kept, Search/list/selection/view untouched), then reject `create()` when `vault.containsKey(name)` before any mutation, and verify all tests pass
 - [ ] 4.3 Smoke test the running app: create a record while a stale filter is active, create one with a duplicate name, submit one with an empty name and one with an empty password, type into Search and watch the list refresh, then edit and delete a record — confirm each matches its spec scenario on screen
-- [ ] 4.4 Run the DDD, GRASP, tests and openspec verification checks for the diff and record any findings needing follow-up tasks
+- [x] 4.4 Run the DDD, GRASP, tests and openspec verification checks for the diff and record any findings needing follow-up tasks
