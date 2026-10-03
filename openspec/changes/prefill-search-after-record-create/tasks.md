@@ -16,9 +16,12 @@
 - [x] 2.4 Extract the record-loading step so `onClick()` and `create()` share it (design D2), add a test case that clicking a row still loads its record, and verify `./mvnw -B compile` plus the click case pass
 - [x] 2.5 Apply the collaborator's post-create state in `create()` in the order put → set Search text → refresh list → select, leaving `vaultLoader.save()` where it is (design D3), and verify the test from 2.3 passes
 - [x] 2.6 Make `updateSelector()` delegate matching and ordering to `RecordSearch` (design D1, D4), and verify both the unit tests and the integration test pass
-- [x] 2.7 Add integration test cases: a creation rejected for an empty name or empty password records a warning and leaves the Search box, list, selection and record view unchanged; `save()` keeps the Search text; `delete()` keeps the Search text; a duplicate name leaves one record holding the new password and selected, and verify all pass
+- [x] 2.7 Add integration test cases: a creation rejected for an empty name or empty password records a warning and leaves the Search box, list, selection and record view unchanged; `save()` keeps the Search text; `delete()` keeps the Search text; a duplicate name warns and leaves the stored record, Search text, list, selection and record view unchanged (behaviour later hardened by 2.8), and verify all pass
+
+- [x] 2.8 Duplicate-name fix (requested after smoke): spec scenario changed from "overwrites" to "warns and keeps the stored record", write the failing integration case first (warning recorded, old password kept, Search/list/selection/view untouched), then reject `create()` when `vault.containsKey(name)` before any mutation, and verify all tests pass
 
 ## 3. CI display
+
 
 - [x] 3.1 Wrap the build step in `.github/workflows/maven.yml` with `xvfb-run` so the integration test has a display (design D5), and verify a push runs the workflow green end to end
 
@@ -26,6 +29,5 @@
 
 - [x] 4.1 Add bullets under the existing `## [Unreleased]` heading in `CHANGELOG.md` covering the after-create behavior and the now-alphabetical record list, and verify it renders under the existing Keep a Changelog headings
 - [x] 4.2 Run `./mvnw -B package` and verify the whole suite is green and the jar builds
-- [x] 2.8 Duplicate-name fix (requested after smoke): spec scenario changed from "overwrites" to "warns and keeps the stored record", write the failing integration case first (warning recorded, old password kept, Search/list/selection/view untouched), then reject `create()` when `vault.containsKey(name)` before any mutation, and verify all tests pass
 - [ ] 4.3 Smoke test the running app: create a record while a stale filter is active, create one with a duplicate name, submit one with an empty name and one with an empty password, type into Search and watch the list refresh, then edit and delete a record — confirm each matches its spec scenario on screen
 - [x] 4.4 Run the DDD, GRASP, tests and openspec verification checks for the diff and record any findings needing follow-up tasks
