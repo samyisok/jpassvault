@@ -18,7 +18,7 @@ The application SHALL run on Java 25 (LTS). The build SHALL target Java 25 bytec
 #### Scenario: CI uses JDK 25
 
 - **WHEN** a push or pull request triggers the CI workflow
-- **THEN** the workflow sets up a JDK 25 toolchain and runs `mvn -B package`
+- **THEN** the workflow sets up a JDK 25 toolchain and runs `xvfb-run -a ./mvnw -B package`, so the toolkit-backed integration tests get a virtual display on a headless runner
 
 ### Requirement: JavaFX UI toolkit from Maven Central
 
