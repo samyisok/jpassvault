@@ -10,7 +10,7 @@
 
 ## 2. Controller seam and integration test
 
-- [ ] 2.1 Extract the dialog seam (design D6): make `warning(...)` protected and pull the inline confirmation alerts of `save()` and `delete()` into a protected `confirm(...)` returning the user's answer, and verify `./mvnw -B package` still passes and the dialogs behave identically in a manual run
+- [x] 2.1 Extract the dialog seam (design D6): make `warning(...)` protected and pull the inline confirmation alerts of `save()` and `delete()` into a protected `confirm(...)` returning the user's answer, and verify `./mvnw -B package` still passes and the dialogs behave identically in a manual run
 - [x] 2.2 Write a failing `src/test/java/com/samyisok/jpassvaultclient/controllers/VaultControllerIntegrationTest.java`: boot the JavaFX toolkit once (static setup, `Platform.setImplicitExit(false)`, no `Platform.exit()`), configure a `FXMLLoader` for `vault.fxml` with the controller factory `ViewLoader.loadRoot` uses, supply an in-memory `Vault` plus a stub `VaultLoader` (design D7), override the dialog methods from 2.1, and run all assertions on the JavaFX Application Thread (design D5)
 - [x] 2.3 In that test assert the create flow (design D3): enter a name and password, call `create()`, then assert the Search box holds the name, the list shows it, the row is selected and the record view carries the login and password, and verify it fails for the missing behavior
 - [x] 2.4 Extract the record-loading step so `onClick()` and `create()` share it (design D2), add a test case that clicking a row still loads its record, and verify `./mvnw -B compile` plus the click case pass
@@ -29,5 +29,5 @@
 
 - [x] 4.1 Add bullets under the existing `## [Unreleased]` heading in `CHANGELOG.md` covering the after-create behavior and the now-alphabetical record list, and verify it renders under the existing Keep a Changelog headings
 - [x] 4.2 Run `./mvnw -B package` and verify the whole suite is green and the jar builds
-- [ ] 4.3 Smoke test the running app: create a record while a stale filter is active, create one with a duplicate name, submit one with an empty name and one with an empty password, type into Search and watch the list refresh, then edit and delete a record — confirm each matches its spec scenario on screen
+- [x] 4.3 Smoke test the running app: create a record while a stale filter is active, create one with a duplicate name, submit one with an empty name and one with an empty password, type into Search and watch the list refresh, then edit and delete a record — confirm each matches its spec scenario on screen
 - [x] 4.4 Run the DDD, GRASP, tests and openspec verification checks for the diff and record any findings needing follow-up tasks
