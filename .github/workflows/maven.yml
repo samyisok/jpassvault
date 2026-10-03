@@ -22,4 +22,5 @@ jobs:
         java-version: '25'
         distribution: 'temurin'
     - name: Build with Maven
-      run: ./mvnw -B package --file pom.xml
+      # xvfb-run supplies the display the toolkit-backed integration test needs
+      run: xvfb-run -a ./mvnw -B package --file pom.xml

@@ -2,18 +2,16 @@ package com.samyisok.jpassvaultclient.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.stream.Collectors;
 import com.samyisok.jpassvaultclient.EventAction;
 import com.samyisok.jpassvaultclient.EventPublisher;
+import com.samyisok.jpassvaultclient.domains.vault.RecordSearch;
 import com.samyisok.jpassvaultclient.domains.vault.Vault;
 import com.samyisok.jpassvaultclient.domains.vault.VaultContainer;
 import com.samyisok.jpassvaultclient.domains.vault.VaultLoader;
 import com.samyisok.jpassvaultclient.password.PasswordGenerator;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -110,14 +108,17 @@ public class VaultController implements Initializable {
     updateSelector();
   }
 
+  /**
+   * Refills the list from the Search box text: case-insensitive substring
+   * match, alphabetical, so the list stops reshuffling between keystrokes.
+   */
   void updateSelector() {
-    Set<String> filteredSet = vault.keySet().stream().filter(
-        el -> el.toLowerCase().contains(searchViewByName.getText().toLowerCase()))
-        .collect(Collectors.toSet());
-    ObservableList<String> vaultElems =
-        FXCollections.observableArrayList(filteredSet);
-    listVault.getItems().clear();
-    listVault.getItems().addAll(vaultElems);
+    fillList(RecordSearch.matches(vault.keySet(), searchViewByName.getText()));
+  }
+
+  /** Replaces the visible records; the selection is re-applied afterwards. */
+  private void fillList(Collection<String> visibleNames) {
+    listVault.getItems().setAll(visibleNames);
   }
 
   @FXML
@@ -127,8 +128,13 @@ public class VaultController implements Initializable {
       return;
     }
 
-    VaultContainer vaultContainer = vault.get(item);
-    nameView.setText(item);
+    showRecord(item);
+  }
+
+  /** Loads a stored record into the view pane; shared by click and create. */
+  private void showRecord(String name) {
+    VaultContainer vaultContainer = vault.get(name);
+    nameView.setText(name);
     loginView.setText(vaultContainer.getLogin());
     passwordView.setText(vaultContainer.getPassword());
   }
@@ -140,14 +146,26 @@ public class VaultController implements Initializable {
       return;
     }
 
-    VaultContainer item =
-        new VaultContainer(loginCreate.getText(), passwordCreate.getText());
-    vault.put(nameCreate.getText(), item);
-    updateSelector();
+    String createdName = nameCreate.getText();
+    vault.put(createdName,
+        new VaultContainer(loginCreate.getText(), passwordCreate.getText()));
+    applyState(RecordSearch.afterCreate(vault.keySet(), createdName));
+    showRecord(createdName);
     vaultLoader.save(vault);
     nameCreate.setText(null);
     loginCreate.setText(null);
     passwordCreate.setText(null);
+  }
+
+  /**
+   * Shows the post-create screen state: the created name replaces whatever
+   * filter text was there, the list is refreshed from it, then the created
+   * record is selected — order matters, because refreshing clears the selection.
+   */
+  private void applyState(RecordSearch.PostCreateState state) {
+    searchViewByName.setText(state.filterText());
+    fillList(state.visibleNames());
+    listVault.getSelectionModel().select(state.selectedName());
   }
 
   @FXML
@@ -158,25 +176,39 @@ public class VaultController implements Initializable {
       return;
     }
 
-    Alert alert = new Alert(AlertType.CONFIRMATION);
-    alert.setTitle("Delete record?");
-    alert.setContentText("Data would be permanently deleted!");
-    Optional<ButtonType> result = alert.showAndWait();
-
-    if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+    if (confirm("Delete record?", "Data would be permanently deleted!")) {
       vault.remove(item);
       updateSelector();
       vaultLoader.save(vault);
     }
   }
 
-  void warning(String headerMessage, String message) {
+  /**
+   * Modal warning. Overridable so a test can record the message instead of
+   * blocking forever in {@code showAndWait()}; production behaviour unchanged.
+   */
+  protected void warning(String headerMessage, String message) {
     Alert alert = new Alert(AlertType.WARNING);
     alert.setTitle("Warning");
     alert.setHeaderText(headerMessage);
     alert.setContentText(message);
 
     alert.showAndWait();
+  }
+
+  /**
+   * Modal confirmation, the dialog {@code save()} and {@code delete()} used to
+   * open inline. Overridable for the same reason as {@link #warning}.
+   *
+   * @return true when the user confirmed
+   */
+  protected boolean confirm(String title, String content) {
+    Alert alert = new Alert(AlertType.CONFIRMATION);
+    alert.setTitle(title);
+    alert.setContentText(content);
+    Optional<ButtonType> result = alert.showAndWait();
+
+    return result.isPresent() && result.get() == ButtonType.OK;
   }
 
   @FXML
@@ -196,12 +228,7 @@ public class VaultController implements Initializable {
       return;
     }
 
-    Alert alert = new Alert(AlertType.CONFIRMATION);
-    alert.setTitle("Save record?");
-    alert.setContentText("Data would be permanently changed!");
-    Optional<ButtonType> result = alert.showAndWait();
-
-    if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+    if (confirm("Save record?", "Data would be permanently changed!")) {
       VaultContainer newVaultContainer =
           new VaultContainer(loginView.getText(), passwordView.getText());
       String name = nameView.getText();

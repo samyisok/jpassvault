@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Creating a record now puts its name into the Search box, refreshes the filtered list and selects the record, so the record you just saved is the one you see — with its login and password shown and ready to copy. A search filter left over from earlier no longer hides the new record.
+- A creation rejected for an empty name or empty password leaves the screen exactly as it was: the search text, the list, the selection and the shown record are untouched.
+
+### Changed
+
+- The record list is now sorted alphabetically, ignoring case, instead of coming out in arbitrary order, so it no longer reshuffles while you type.
+
 ## [2.0.0] - 2026-09-30
 
 ### Added
