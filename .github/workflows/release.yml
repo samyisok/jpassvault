@@ -34,7 +34,14 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
-        run: ./mvnw -B package --file pom.xml
+        shell: bash
+        run: |
+          # Linux runners are headless; xvfb supplies the display the toolkit-backed test needs (same as maven.yml)
+          if [ "${RUNNER_OS}" = "Linux" ]; then
+            xvfb-run -a ./mvnw -B package --file pom.xml
+          else
+            ./mvnw -B package --file pom.xml
+          fi
       - name: Package portable image
         shell: bash
         run: |
