@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-10-04
+
+### Added
+
+- Portable downloads: every release now ships unpack-and-run archives for Linux, Windows and macOS with Java built in — no Java to install, just extract and start the vault.
+- Release safety: publishing now stops immediately if the version tag and the project version disagree, so a release can never carry files named for the wrong version.
+
 ## [2.1.0] - 2026-10-03
 
 ### Added

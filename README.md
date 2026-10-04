@@ -24,6 +24,35 @@ You can choose in setting where you can save the original vault DB, including cl
 Db vault is secured with "AES/GCM/NoPadding" that should be most secured according to [sonarsource](https://rules.sonarsource.com/java/RSPEC-4432) and [Aritcles from the internet](https://proandroiddev.com/security-best-practices-symmetric-encryption-with-aes-in-java-7616beaaade9).
 And will use another separate masterkey when vault first created.
 
+# Download and run (no Java needed)
+
+Every [release](https://github.com/samyisok/jpassvault/releases) ships portable archives for Linux, Windows, and macOS. Each archive contains the app plus a bundled Java runtime (~60–100 MB unpacked, almost all of it the runtime), so the vault starts on a machine with no Java installed — no installer, no admin rights.
+
+Linux:
+
+```sh
+tar -xzf jpassvaultclient-<version>-linux.tar.gz
+./jpassvaultclient/bin/jpassvaultclient
+```
+
+Windows:
+
+```powershell
+Expand-Archive jpassvaultclient-<version>-windows.zip   # or extract with Explorer
+.\jpassvaultclient\jpassvaultclient.exe
+```
+
+macOS:
+
+```sh
+tar -xzf jpassvaultclient-<version>-macos.tar.gz
+open jpassvaultclient.app
+```
+
+On first launch macOS Gatekeeper asks for confirmation (the app is not signed) — right-click the app and choose **Open**.
+
+The shaded jar remains a supported way to run the app (see Requirements) if you already have a Java 25 runtime.
+
 # Installation
 
 Installation proceeds with according principle *BYDY* - Build Yourself, Deploy Yourself.

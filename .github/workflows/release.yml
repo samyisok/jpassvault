@@ -18,6 +18,15 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v4
+      - name: Verify tag matches pom version
+        shell: bash
+        run: |
+          tag_version="${GITHUB_REF_NAME#v}"
+          pom_version=$(awk -F'[<>]' '/<version>/ { print $3; exit }' pom.xml)
+          if [ "$tag_version" != "$pom_version" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match pom.xml version $pom_version" >&2
+            exit 1
+          fi
       - name: Set up JDK 25
         uses: actions/setup-java@v4
         with:
@@ -26,6 +35,24 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: ./mvnw -B package --file pom.xml
+      - name: Package portable image
+        shell: bash
+        run: |
+          # one version source for jars and archives: the release tag
+          export JPASSVAULT_VERSION="${GITHUB_REF_NAME#v}"
+          if [ "${RUNNER_OS}" = "Windows" ]; then
+            pwsh -File packaging/package.ps1
+          else
+            ./packaging/package.sh
+          fi
+      - name: Upload portable image
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.os }}
+          path: |
+            dist/*.tar.gz
+            dist/*.zip
+          if-no-files-found: error
       - name: Collect jar
         shell: bash
         run: |
@@ -55,6 +82,12 @@ jobs:
           pattern: jar-*
           merge-multiple: true
           path: dist
+      - name: Download portable images
+        uses: actions/download-artifact@v4
+        with:
+          pattern: dist-*
+          merge-multiple: true
+          path: dist
       - name: Extract changelog notes
         shell: bash
         run: |
@@ -78,5 +111,9 @@ jobs:
         with:
           name: ${{ github.ref_name }}
           body_path: notes.md
-          files: dist/*.jar
+          files: |
+            dist/*.jar
+            dist/*.tar.gz
+            dist/*.zip
+          fail_on_unmatched_files: true
           draft: false
