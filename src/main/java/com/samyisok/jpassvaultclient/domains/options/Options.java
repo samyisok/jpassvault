@@ -1,6 +1,8 @@
 package com.samyisok.jpassvaultclient.domains.options;
 
 import java.io.Serializable;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 
 public class Options implements Serializable {
@@ -88,9 +90,39 @@ public class Options implements Serializable {
   }
 
   /**
+   * Sync URLs must be https; plain http survives only for local development
+   * hosts. Empty means "sync disabled" and is always acceptable.
+   */
+  public static boolean isSecureUrl(String url) {
+    if (url == null || url.isEmpty()) {
+      return true;
+    }
+    URI uri;
+    try {
+      uri = new URI(url);
+    } catch (URISyntaxException e) {
+      return false;
+    }
+    if ("https".equalsIgnoreCase(uri.getScheme())) {
+      return true;
+    }
+    if ("http".equalsIgnoreCase(uri.getScheme())) {
+      String host = uri.getHost();
+      return "localhost".equals(host) || "127.0.0.1".equals(host);
+    }
+    return false;
+  }
+
+  /**
    * @param apiUrl the apiUrl to set
+   * @throws IllegalArgumentException when the URL is neither https nor a
+   *         localhost http URL
    */
   public void setApiUrl(String apiUrl) {
+    if (!isSecureUrl(apiUrl)) {
+      throw new IllegalArgumentException(
+          "Only https:// sync URLs are allowed (plain http is limited to localhost)");
+    }
     this.apiUrl = apiUrl;
   }
 
@@ -103,7 +135,7 @@ public class Options implements Serializable {
   @Override
   public String toString() {
     return "Options [apiUrl=" + apiUrl + ", pathVault=" + pathVault + ", tokenApi="
-        + tokenApi + "]";
+        + (tokenApi == null || tokenApi.isEmpty() ? "" : "********") + "]";
   }
 
   public boolean ifOnlineSyncOn(){

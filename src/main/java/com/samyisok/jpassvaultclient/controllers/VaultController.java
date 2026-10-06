@@ -21,8 +21,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
 
 public class VaultController implements Initializable {
 
@@ -32,6 +30,7 @@ public class VaultController implements Initializable {
   private final Vault vault;
   private final VaultLoader vaultLoader;
   private final PasswordGenerator passwordGenerator;
+  private final ClipboardAutoClear clipboardAutoClear;
 
   @FXML
   ListView<String> listVault = new ListView<String>();
@@ -70,11 +69,13 @@ public class VaultController implements Initializable {
   CheckBox showPasswordCreateCheckBox;
 
   public VaultController(EventPublisher eventPublisher, Vault vault,
-      VaultLoader vaultLoader, PasswordGenerator passwordGenerator) {
+      VaultLoader vaultLoader, PasswordGenerator passwordGenerator,
+      ClipboardAutoClear clipboardAutoClear) {
     this.eventPublisher = eventPublisher;
     this.vault = vault;
     this.vaultLoader = vaultLoader;
     this.passwordGenerator = passwordGenerator;
+    this.clipboardAutoClear = clipboardAutoClear;
   }
 
   @FXML
@@ -249,10 +250,7 @@ public class VaultController implements Initializable {
 
   @FXML
   void copy() {
-    final Clipboard clipboard = Clipboard.getSystemClipboard();
-    final ClipboardContent content = new ClipboardContent();
-    content.putString(passwordView.getText());
-    clipboard.setContent(content);
+    clipboardAutoClear.copy(passwordView.getText());
   }
 
   @FXML

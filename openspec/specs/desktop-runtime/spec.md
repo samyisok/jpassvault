@@ -88,16 +88,19 @@ The application SHALL open at a default size of 1000x600 pixels and SHALL hold t
 
 ### Requirement: Backward-compatible data and protocol formats
 
-The migration SHALL NOT change user data or external interfaces: the encrypted vault file format (`jpassdb.xdb`), the AES/GCM encryption with SHA3-256-derived keys, the `config.json` settings file, and the remote sync HTTP protocol SHALL remain byte- and behavior-compatible with the previous version.
-
-This requirement rests on the crypto, serialization and protocol code being left untouched by the migration, not on an executed test: no vault file created by the pre-migration version was available to verify against, so cross-version loading is unproven by test.
+Data and protocol changes SHALL preserve compatibility through versioned formats and migration rather than by freezing the format: existing user files (the encrypted vault `jpassdb.xdb` and the `config.json` settings file) SHALL keep opening after an application upgrade, and any change to encryption parameters SHALL be stored behind a format version so older files can be read and rewritten in the current format after a successful unlock. The remote sync HTTP protocol SHALL keep its existing paths, headers, and JSON shapes; the only permitted protocol-side change is requiring an `https` scheme for non-local API URLs. Rolling back to a previous application version may lose writes made in the newer format, but SHALL NOT make the data unreadable in the newer version.
 
 #### Scenario: Existing vault opens after migration
 
-- **WHEN** a user inspects a vault file and settings file created by the previous version
-- **THEN** the file format, AES/GCM parameters, and SHA3-256 key derivation are identical, so the existing data loads without migration
+- **WHEN** a user upgrades the application and unlocks a vault file and settings file created by a previous version with the correct password
+- **THEN** the files load successfully, the records are intact, and the vault is rewritten in the current format only after a subsequent save
 
 #### Scenario: Remote sync interoperates with existing server
 
-- **WHEN** online sync is enabled with a previously configured API URL and token
-- **THEN** checksum checks, downloads, uploads, and merges behave identically to the previous version
+- **WHEN** online sync is enabled with a previously configured `https` API URL and token
+- **THEN** checksum checks, downloads, uploads, and merges keep their existing request and response shapes
+
+#### Scenario: Newer-format file is recognized, not garbled
+
+- **WHEN** a previous application version attempts to read a vault file written in the current format
+- **THEN** it fails cleanly without corrupting the file, and the newer version still opens it normally

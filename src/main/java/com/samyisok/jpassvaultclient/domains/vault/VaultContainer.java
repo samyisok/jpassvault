@@ -90,7 +90,7 @@ public class VaultContainer {
 
   @Override
   public String toString() {
-    return "VaultContainer [login=" + login + ", password=" + password + "]";
+    return "VaultContainer [login=" + login + ", password=***]";
   }
 
 

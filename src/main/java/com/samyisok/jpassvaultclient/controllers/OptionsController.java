@@ -70,7 +70,12 @@ public class OptionsController implements Initializable {
 
   @FXML
   void saveOptions() {
-    options.setApiUrl(apiUrlField.getText());
+    try {
+      options.setApiUrl(apiUrlField.getText());
+    } catch (IllegalArgumentException e) {
+      warning("Invalid API URL", e.getMessage());
+      return;
+    }
     options.setTokenApi(tokenField.getText());
     options.setPathVault(databasePathField.getText());
     optionsLoader.save(options);

@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-10-06
+
+### Security
+
+- Every save now uses a fresh random initialization vector, so two copies of the vault can no longer be compared to work out what changed.
+- The master key is now derived with a slow, salted PBKDF2-HMAC-SHA256 derivation (600 000 iterations) instead of a single SHA3-256 hash, making offline password guessing far more expensive.
+- Vault files and sync responses carrying absurd or malformed encryption parameters are rejected cleanly instead of freezing the app.
+- Sync URLs must use `https` (plain `http` is allowed only for `localhost` and `127.0.0.1`); an insecure URL is refused when saved and never contacted. **Breaking:** existing `http://` sync settings must move to `https`.
+- The vault file, its backup and the settings file are owner-only (`0600`) from the moment they are created and are written atomically, so a failed save never truncates the existing file; the vault folder is owner-only too.
+- Locking the vault now clears the master password and everything derived from it, and clears a copied password from the clipboard; a copied password is also cleared after 30 seconds and when the app exits.
+- The sync API token no longer appears in diagnostic text (it is shown masked), and stored record passwords are never printed.
+- Sync change detection now uses a keyed HMAC-SHA256 value instead of an unkeyed MD5 of the ciphertext.
+
+### Added
+
+- New vaults must use a master password of at least 8 characters. Unlocking an existing vault still accepts its original password, whatever its length.
+
+### Changed
+
+- Vault files written by this version use a new versioned format that older app versions cannot read. No data is lost and existing vaults upgrade automatically on first save; rolling back loses only writes made in the new format.
+- Under the hood, vault storage now goes through a small storage port and the vault lifecycle is coordinated separately from screen switching; behaviour is unchanged.
+
+### Fixed
+
+- A save that fails while encrypting no longer leaves an empty vault file — the previous file is kept.
+- A malformed sync response no longer aborts the unlock flow: it is reported as a sync failure and the local vault still opens.
+
 ## [2.2.0] - 2026-10-04
 
 ### Added

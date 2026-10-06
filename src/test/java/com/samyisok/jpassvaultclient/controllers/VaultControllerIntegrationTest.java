@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import com.samyisok.jpassvaultclient.EventPublisher;
+import com.samyisok.jpassvaultclient.FileVaultStore;
 import com.samyisok.jpassvaultclient.StageHolder;
+import com.samyisok.jpassvaultclient.controllers.ClipboardAutoClear;
 import com.samyisok.jpassvaultclient.crypto.AesCipher;
 import com.samyisok.jpassvaultclient.domains.options.Options;
 import com.samyisok.jpassvaultclient.domains.session.Session;
@@ -58,7 +60,7 @@ class VaultControllerIntegrationTest {
         new FXMLLoader(VaultController.class.getResource(VaultController.FXML_PATH));
     loader.setControllerFactory(
         type -> new RecordingController(new EventPublisher(new StageHolder()), vault,
-            vaultLoader, new PasswordGenerator()));
+            vaultLoader, new PasswordGenerator(), ClipboardAutoClear.forSystemClipboard()));
     loader.load();
     return (RecordingController) loader.getController();
   }
@@ -231,8 +233,8 @@ class VaultControllerIntegrationTest {
     boolean confirmAnswer = true;
 
     RecordingController(EventPublisher eventPublisher, Vault vault, VaultLoader vaultLoader,
-        PasswordGenerator passwordGenerator) {
-      super(eventPublisher, vault, vaultLoader, passwordGenerator);
+        PasswordGenerator passwordGenerator, ClipboardAutoClear clipboardAutoClear) {
+      super(eventPublisher, vault, vaultLoader, passwordGenerator, clipboardAutoClear);
     }
 
     @Override
@@ -252,7 +254,9 @@ class VaultControllerIntegrationTest {
     int saves;
 
     StubVaultLoader(Vault vault) {
-      super(new Options(), vault, new AesCipher(new Session()));
+      super(vault, new AesCipher(new Session()),
+          new FileVaultStore(() -> java.nio.file.Path.of("unused-vault.xdb")),
+          new FileVaultStore(() -> java.nio.file.Path.of("unused-backup.xdb")));
     }
 
     @Override

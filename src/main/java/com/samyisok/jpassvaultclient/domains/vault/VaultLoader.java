@@ -1,30 +1,27 @@
 package com.samyisok.jpassvaultclient.domains.vault;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.nio.file.Path;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.stream.Collectors;
 import com.google.gson.Gson;
 import com.samyisok.jpassvaultclient.crypto.AesCipher;
 import com.samyisok.jpassvaultclient.crypto.EncryptionException;
-import com.samyisok.jpassvaultclient.domains.options.Options;
 
+/**
+ * Domain-side vault persistence: serializes the aggregate, encrypts it, and
+ * delegates storage to a {@link VaultStore} port (design D17). Contains no
+ * file, path, or permission knowledge.
+ */
 public class VaultLoader {
 
-  private final Options options;
   private final Vault vault;
   private final AesCipher aesCipher;
+  private final VaultStore vaultStore;
+  private final VaultStore backupStore;
 
-  public VaultLoader(Options options, Vault vault, AesCipher aesCipher) {
-    this.options = options;
+  public VaultLoader(Vault vault, AesCipher aesCipher, VaultStore vaultStore,
+      VaultStore backupStore) {
     this.vault = vault;
     this.aesCipher = aesCipher;
+    this.vaultStore = vaultStore;
+    this.backupStore = backupStore;
   }
 
   public String toJson(Vault vault) {
@@ -46,47 +43,33 @@ public class VaultLoader {
   }
 
   void saveBackup() {
-    save(vault, Options.getFullDefaultBackupVaultPath());
+    write(backupStore);
   }
 
   public void save(Vault vault) {
-    save(vault, options.getFullPathVaultOrDefault());
+    write(vaultStore);
   }
 
-  void save(Vault vault, Path pathToSave) {
-    try (
-        FileWriter file = new FileWriter(pathToSave.toFile());
-        BufferedWriter br = new BufferedWriter(file);
-        PrintWriter pr = new PrintWriter(br)) {
-      String cryptedJson = getEncryptedJsonDb(vault);
-      pr.write(cryptedJson);
+  private void write(VaultStore store) {
+    String encryptedJson;
+    try {
+      // Encrypt before touching the destination: a failure must not truncate
+      // the existing vault (design D11).
+      encryptedJson = getEncryptedJsonDb(vault);
     } catch (Exception exception) {
-      System.out
-          .println("cant write file: " + exception.toString() + exception.getMessage());
+      System.err.println(
+          "cant encrypt vault, existing file preserved: " + exception.getMessage());
+      return;
+    }
+    try {
+      store.write(encryptedJson);
+    } catch (Exception exception) {
+      System.err.println("cant write vault file: " + exception.getMessage());
     }
   }
 
   public String getVaultEncryptCheckSum() throws EncryptionException {
-    String cryptedJson = getEncryptedJsonDb(vault);
-    MessageDigest md;
-    try {
-      md = MessageDigest.getInstance("MD5");
-      md.update(cryptedJson.getBytes());
-      byte[] digest = md.digest();
-      String checksum = bytesToHex(digest).toUpperCase();
-      return checksum;
-    } catch (NoSuchAlgorithmException e) {
-      e.printStackTrace();
-      return null;
-    }
-  }
-
-  String bytesToHex(byte[] bytes) {
-    StringBuilder sb = new StringBuilder();
-    for (byte b : bytes) {
-      sb.append(String.format("%02x", b));
-    }
-    return sb.toString();
+    return aesCipher.checksumOf(toJson(vault));
   }
 
   public void load() {
@@ -99,20 +82,17 @@ public class VaultLoader {
   }
 
   public void createEmptyDbIfNotExist() {
-    File tempFile = new File(options.getFullPathVaultOrDefault().toString());
-    if (!tempFile.exists()) {
+    if (!vaultStore.exists()) {
       save(new Vault());
     }
   }
 
   public boolean ifDbExists() {
-    File tempFile = new File(options.getFullPathVaultOrDefault().toString());
-    return tempFile.exists();
+    return vaultStore.exists();
   }
 
   public boolean vaultPasswordIsValid() {
-    File tempFile = new File(options.getFullPathVaultOrDefault().toString());
-    if (!tempFile.exists()) {
+    if (!vaultStore.exists()) {
       return false;
     }
 
@@ -126,18 +106,12 @@ public class VaultLoader {
   }
 
   String loadDecrypt() throws Exception {
-    try (
-        FileReader file = new FileReader(options.getFullPathVaultOrDefault().toFile());
-        BufferedReader br = new BufferedReader(file)) {
-      String cryptedJson = br.lines().collect(Collectors.joining());
-      return aesCipher.decrypt(cryptedJson);
-    } catch (Exception e) {
-      throw e;
-    }
+    return aesCipher.decrypt(vaultStore.read());
   }
 
   public void unload() {
     vault.clear();
+    aesCipher.clearKeys();
   }
 
   public void merge(String encriptedDb) throws MergeVaultException {

@@ -13,6 +13,9 @@ public class SetupController {
 
   public static final String FXML_PATH = "/com/samyisok/jpassvaultclient/setup.fxml";
 
+  /** Minimum length for a newly created master password (creation only). */
+  static final int MIN_PASSWORD_LENGTH = 8;
+
   private final EventPublisher eventPublisher;
   private final VaultLoader vaultLoader;
   private final Session session;
@@ -44,8 +47,9 @@ public class SetupController {
       warning("Password does not match!", "Specify correct password");
       return;
     }
-    if (createPassword1.getText().isEmpty() || createPassword1.getText().length() < 3) {
-      warning("Password invalid", "Password is empty or not complain to security!");
+    if (createPassword1.getText().length() < MIN_PASSWORD_LENGTH) {
+      warning("Password invalid",
+          "Password must be at least " + MIN_PASSWORD_LENGTH + " characters long");
       return;
     }
 

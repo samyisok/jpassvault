@@ -124,6 +124,9 @@ public class RemoteVault implements RemotableVault {
     } catch (Exception e) {
       throw new RemoteException("invalid response");
     }
+    if (hash == null) {
+      throw new RemoteException("invalid response");
+    }
 
     return hash;
   }
@@ -164,6 +167,9 @@ public class RemoteVault implements RemotableVault {
     if (host.isEmpty() || token.isEmpty()) {
       throw new RemoteException("Api or token does not init");
     }
+    if (!Options.isSecureUrl(host)) {
+      throw new RemoteException("Refusing non-https sync URL: " + host);
+    }
 
     HttpRequest request = HttpRequest.newBuilder(URI.create(host))
         .header("accept", "application/json")
@@ -188,6 +194,9 @@ public class RemoteVault implements RemotableVault {
 
     if (host.isEmpty() || token.isEmpty()) {
       throw new RemoteException("Api or token does not init");
+    }
+    if (!Options.isSecureUrl(host)) {
+      throw new RemoteException("Refusing non-https sync URL: " + host);
     }
 
     HttpRequest request = HttpRequest.newBuilder(URI.create(host))

@@ -62,7 +62,7 @@ public class StageInit {
         Path defaultFolder = Path.of(Options.DEFAULT_FOLDER);
         if (Files.notExists(defaultFolder, LinkOption.NOFOLLOW_LINKS)) {
             try {
-                Files.createDirectory(defaultFolder);
+                FilePermissions.createOwnerOnlyDirectory(defaultFolder);
             } catch (Exception e) {
                 critical("Critical Error", e.toString());
             }

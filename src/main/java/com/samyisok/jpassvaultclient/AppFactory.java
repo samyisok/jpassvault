@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.function.Supplier;
+import com.samyisok.jpassvaultclient.controllers.ClipboardAutoClear;
 import com.samyisok.jpassvaultclient.controllers.MainController;
 import com.samyisok.jpassvaultclient.controllers.OptionsController;
 import com.samyisok.jpassvaultclient.controllers.SetupController;
@@ -31,14 +32,19 @@ public class AppFactory {
   private final Session session = new Session();
   private final AesCipher aesCipher = new AesCipher(session);
   private final Vault vault = new Vault();
-  private final VaultLoader vaultLoader = new VaultLoader(options, vault, aesCipher);
+  private final VaultLoader vaultLoader = new VaultLoader(vault, aesCipher,
+      new FileVaultStore(options::getFullPathVaultOrDefault),
+      new FileVaultStore(() -> Options.getFullDefaultBackupVaultPath()));
   private final PasswordGenerator passwordGenerator = new PasswordGenerator();
   private final RemoteVault remoteVault = new RemoteVault(options, session, vaultLoader);
+  private final ClipboardAutoClear clipboardAutoClear = ClipboardAutoClear.forSystemClipboard();
   private final StageHolder stageHolder = new StageHolder();
   private final EventPublisher eventPublisher = new EventPublisher(stageHolder);
   private final ViewLoader viewLoader = new ViewLoader(this::getController);
+  private final VaultLifecycleCoordinator vaultLifecycle = new VaultLifecycleCoordinator(
+      vaultLoader, remoteVault, options, session, clipboardAutoClear);
   private final MainListener mainListener =
-      new MainListener(stageHolder, vaultLoader, viewLoader, remoteVault, options);
+      new MainListener(stageHolder, viewLoader, vaultLifecycle);
   private final StageInit stageInit = new StageInit(stageHolder, vaultLoader,
       optionsLoader, options, viewLoader, loadApplicationTitle());
 
@@ -55,7 +61,8 @@ public class AppFactory {
     controllerFactories.put(SetupController.class,
         () -> new SetupController(eventPublisher, vaultLoader, session));
     controllerFactories.put(VaultController.class,
-        () -> new VaultController(eventPublisher, vault, vaultLoader, passwordGenerator));
+        () -> new VaultController(eventPublisher, vault, vaultLoader, passwordGenerator,
+            clipboardAutoClear));
   }
 
   public Object getController(Class<?> type) {

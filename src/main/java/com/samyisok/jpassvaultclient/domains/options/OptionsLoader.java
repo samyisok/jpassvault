@@ -1,12 +1,11 @@
 package com.samyisok.jpassvaultclient.domains.options;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
+import java.nio.file.Path;
 import java.util.stream.Collectors;
 import com.google.gson.Gson;
+import com.samyisok.jpassvaultclient.FilePermissions;
 
 public class OptionsLoader {
 
@@ -27,15 +26,15 @@ public class OptionsLoader {
   }
 
   public void save(Options options) {
-    try (
-        FileWriter file = new FileWriter(Options.getFullDefaultSettingsPath().toFile());
-        BufferedWriter br = new BufferedWriter(file);
-        PrintWriter pr = new PrintWriter(br)) {
-      String json = toJson(options);
-      pr.write(json);
+    save(options, Options.getFullDefaultSettingsPath());
+  }
+
+  public void save(Options options, Path path) {
+    String json = toJson(options);
+    try {
+      FilePermissions.writeOwnerOnly(path, json);
     } catch (Exception exception) {
-      System.out
-          .println("cant write file: " + exception.toString() + exception.getMessage());
+      System.err.println("cant write settings file: " + exception.getMessage());
     }
   }
 
@@ -45,7 +44,12 @@ public class OptionsLoader {
         BufferedReader br = new BufferedReader(file)) {
       String json = br.lines().collect(Collectors.joining());
       Options newOptions = toObject(json);
-      options.setApiUrl(newOptions.getApiUrl());
+      try {
+        options.setApiUrl(newOptions.getApiUrl());
+      } catch (IllegalArgumentException insecure) {
+        // hand-edited config: keep sync disabled instead of aborting the load
+        System.out.println("ignoring insecure api url from config: " + insecure.getMessage());
+      }
       options.setTokenApi(newOptions.getTokenApi());
       options.setPathVault(newOptions.getPathVault());
     } catch (Exception exception) {
