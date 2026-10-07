@@ -8,6 +8,7 @@
 
 .button {
     -fx-background-color: #dfd;
+    -fx-font-size: 20px;
 }
 
 
@@ -34,4 +35,17 @@
 
 .check-box .box {
     -fx-background-color: #dfd
+}
+
+.smallButton {
+    -fx-font-size: 15px;
+}
+
+.iconButton {
+    -fx-font-size: 18px;
+}
+
+.text-field,
+.password-field {
+    -fx-font-size: 18px;
 }

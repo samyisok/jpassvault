@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.0] - 2026-10-07
+
+### Added
+
+- The app now ships with its own typeface and uses it on every screen, so the interface looks the same on Linux, Windows and macOS without depending on fonts installed on the computer.
+
+### Changed
+
+- Buttons, text fields and the record list now share that one bundled font family instead of asking for a Windows-only font that other systems silently replaced with something different. Font and text sizing are now defined in one place, so the unlock, setup, options and vault screens stay consistent.
+
+### Fixed
+
+- The Options screen shows its white form background again, so the settings area stands out clearly instead of blending into the rest of the window.
+
 ## [3.0.0] - 2026-10-06
 
 ### Security

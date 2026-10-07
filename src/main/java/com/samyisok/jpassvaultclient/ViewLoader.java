@@ -1,6 +1,7 @@
 package com.samyisok.jpassvaultclient;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.function.Function;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -26,6 +27,9 @@ public class ViewLoader {
    * larger than the view is not left in JavaFX's default white.
    */
   static final String APP_BACKGROUND = "#beb";
+
+  /** Shared stylesheet that carries the bundled application typeface. */
+  static final String APP_STYLESHEET = "/com/samyisok/jpassvaultclient/app.css";
 
   /** Inline style for the frame behind a pinned view. */
   static String frameStyle() {
@@ -80,8 +84,23 @@ public class ViewLoader {
     }
     StackPane frame = framed(content, grows);
     Scene scene = new Scene(frame, size.width(), size.height());
+    addApplicationStylesheet(scene);
     scene.setFill(Color.web(APP_BACKGROUND));
     return scene;
+  }
+
+  /**
+   * Applies the shared application stylesheet, which carries the bundled UI
+   * typeface, so every view inherits one consistent font family.
+   *
+   * @throws IllegalStateException if the stylesheet is not on the classpath
+   */
+  static void addApplicationStylesheet(Scene scene) {
+    URL url = ViewLoader.class.getResource(APP_STYLESHEET);
+    if (url == null) {
+      throw new IllegalStateException("Missing application stylesheet: " + APP_STYLESHEET);
+    }
+    scene.getStylesheets().add(url.toExternalForm());
   }
 
   /**

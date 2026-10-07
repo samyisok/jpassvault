@@ -1,0 +1,6 @@
+.button,
+.text-field,
+.password-field,
+.check-box {
+  -fx-font-family: "Open Sans";
+}

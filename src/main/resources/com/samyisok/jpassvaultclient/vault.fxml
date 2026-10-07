@@ -8,48 +8,19 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" stylesheets="@buttons.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.samyisok.jpassvaultclient.controllers.VaultController">
    <left>
       <AnchorPane prefHeight="600.0" prefWidth="300.0" style="-fx-background-color: #beb;" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="CreateView" layoutX="84.0" layoutY="440.0" mnemonicParsing="false" onAction="#create" prefHeight="55.0" prefWidth="133.0" text="Create" textAlignment="CENTER" textFill="#014d0c">
-               <font>
-                  <Font name="Segoe UI" size="20.0" />
-               </font>
-            </Button>
-            <PasswordField fx:id="passwordCreate" layoutX="38.0" layoutY="290.0" promptText="Password" style="-fx-background-color: #efe;">
-               <font>
-                  <Font name="Segoe UI" size="18.0" />
-               </font>
-            </PasswordField>
-            <TextField fx:id="loginCreate" layoutX="38.0" layoutY="240.0" promptText="Login\Email" style="-fx-background-color: #efe;">
-               <font>
-                  <Font name="Segoe UI" size="18.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="nameCreate" layoutX="38.0" layoutY="189.0" promptText="Name" style="-fx-background-color: #efe;">
-               <font>
-                  <Font name="Segoe UI" size="18.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="searchViewByName" layoutX="38.0" layoutY="35.0" onKeyTyped="#search" promptText="Search" style="-fx-background-color: #efe;">
-               <font>
-                  <Font name="Segoe UI" size="18.0" />
-               </font>
-            </TextField>
+            <Button fx:id="CreateView" layoutX="84.0" layoutY="440.0" mnemonicParsing="false" onAction="#create" prefHeight="55.0" prefWidth="133.0" text="Create" textAlignment="CENTER" textFill="#014d0c" />
+            <PasswordField fx:id="passwordCreate" layoutX="38.0" layoutY="290.0" promptText="Password" style="-fx-background-color: #efe;" />
+            <TextField fx:id="loginCreate" layoutX="38.0" layoutY="240.0" promptText="Login\Email" style="-fx-background-color: #efe;" />
+            <TextField fx:id="nameCreate" layoutX="38.0" layoutY="189.0" promptText="Name" style="-fx-background-color: #efe;" />
+            <TextField fx:id="searchViewByName" layoutX="38.0" layoutY="35.0" onKeyTyped="#search" promptText="Search" style="-fx-background-color: #efe;" />
             <CheckBox fx:id="showPasswordCreateCheckBox" layoutX="38.0" layoutY="345.0" mnemonicParsing="false" onAction="#showPasswordCreate" text="Show password" textFill="#3a6f34" />
-            <Button fx:id="generatePasswordCreateButton" layoutX="209.0" layoutY="332.0" mnemonicParsing="false" onAction="#generatePassword" prefHeight="44.0" prefWidth="53.0" text="🔒" textAlignment="CENTER" textFill="#014d0c">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Button>
-            <TextField fx:id="passwordCreateTextField" layoutX="38.0" layoutY="290.0" promptText="Password" style="-fx-background-color: #efe;" visible="false">
-               <font>
-                  <Font name="Segoe UI" size="18.0" />
-               </font>
-            </TextField>
+            <Button fx:id="generatePasswordCreateButton" layoutX="209.0" layoutY="332.0" mnemonicParsing="false" onAction="#generatePassword" prefHeight="44.0" prefWidth="53.0" styleClass="iconButton" text="🔒" textAlignment="CENTER" textFill="#014d0c" />
+            <TextField fx:id="passwordCreateTextField" layoutX="38.0" layoutY="290.0" promptText="Password" style="-fx-background-color: #efe;" visible="false" />
          </children>
       </AnchorPane>
    </left>
@@ -59,47 +30,15 @@
    <right>
       <AnchorPane prefHeight="600.0" prefWidth="300.0" style="-fx-background-color: #beb;" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="closeButton" layoutX="170.0" layoutY="14.0" mnemonicParsing="false" onAction="#close" prefHeight="55.0" prefWidth="115.0" text="Close" textAlignment="CENTER" textFill="#014d0c">
-               <font>
-                  <Font name="Segoe UI" size="20.0" />
-               </font>
-            </Button>
-            <PasswordField fx:id="passwordView" layoutX="37.0" layoutY="288.0" promptText="Password" style="-fx-background-color: #efe;">
-               <font>
-                  <Font name="Segoe UI" size="18.0" />
-               </font>
-            </PasswordField>
-            <TextField fx:id="loginView" layoutX="37.0" layoutY="238.0" promptText="Login\Email" style="-fx-background-color: #efe;">
-               <font>
-                  <Font name="Segoe UI" size="18.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="nameView" layoutX="37.0" layoutY="187.0" promptText="Name" style="-fx-background-color: #efe;">
-               <font>
-                  <Font name="Segoe UI" size="18.0" />
-               </font>
-            </TextField>
-            <Button fx:id="saveViewButton" layoutX="37.0" layoutY="404.0" mnemonicParsing="false" onAction="#save" prefHeight="55.0" prefWidth="102.0" text="Save" textAlignment="CENTER" textFill="#014d0c">
-               <font>
-                  <Font name="Segoe UI" size="20.0" />
-               </font>
-            </Button>
-            <Button fx:id="copyPassButton" layoutX="150.0" layoutY="404.0" mnemonicParsing="false" onAction="#copy" prefHeight="55.0" prefWidth="111.0" stylesheets="@buttons.css" text="Copy" textAlignment="CENTER" textFill="#014d0c">
-               <font>
-                  <Font name="Segoe UI" size="20.0" />
-               </font>
-            </Button>
-            <Button fx:id="deleteViewButton" layoutX="37.0" layoutY="472.0" mnemonicParsing="false" onAction="#delete" prefHeight="55.0" prefWidth="224.0" text="Delete" textAlignment="CENTER" textFill="#014d0c">
-               <font>
-                  <Font name="Segoe UI" size="20.0" />
-               </font>
-            </Button>
+            <Button fx:id="closeButton" layoutX="170.0" layoutY="14.0" mnemonicParsing="false" onAction="#close" prefHeight="55.0" prefWidth="115.0" text="Close" textAlignment="CENTER" textFill="#014d0c" />
+            <PasswordField fx:id="passwordView" layoutX="37.0" layoutY="288.0" promptText="Password" style="-fx-background-color: #efe;" />
+            <TextField fx:id="loginView" layoutX="37.0" layoutY="238.0" promptText="Login\Email" style="-fx-background-color: #efe;" />
+            <TextField fx:id="nameView" layoutX="37.0" layoutY="187.0" promptText="Name" style="-fx-background-color: #efe;" />
+            <Button fx:id="saveViewButton" layoutX="37.0" layoutY="404.0" mnemonicParsing="false" onAction="#save" prefHeight="55.0" prefWidth="102.0" text="Save" textAlignment="CENTER" textFill="#014d0c" />
+            <Button fx:id="copyPassButton" layoutX="150.0" layoutY="404.0" mnemonicParsing="false" onAction="#copy" prefHeight="55.0" prefWidth="111.0" stylesheets="@buttons.css" text="Copy" textAlignment="CENTER" textFill="#014d0c" />
+            <Button fx:id="deleteViewButton" layoutX="37.0" layoutY="472.0" mnemonicParsing="false" onAction="#delete" prefHeight="55.0" prefWidth="224.0" text="Delete" textAlignment="CENTER" textFill="#014d0c" />
             <CheckBox fx:id="showPasswordViewCheckBox" layoutX="37.0" layoutY="343.0" mnemonicParsing="false" onAction="#showPasswordView" text="Show password" textFill="#3a6f34" />
-            <TextField fx:id="passwordViewTextField" layoutX="37.0" layoutY="288.0" promptText="Password" style="-fx-background-color: #efe;" visible="false">
-               <font>
-                  <Font name="Segoe UI" size="18.0" />
-               </font>
-            </TextField>
+            <TextField fx:id="passwordViewTextField" layoutX="37.0" layoutY="288.0" promptText="Password" style="-fx-background-color: #efe;" visible="false" />
          </children>
       </AnchorPane>
    </right>

@@ -2,10 +2,13 @@ package com.samyisok.jpassvaultclient;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import javafx.collections.FXCollections;
+import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -87,5 +90,23 @@ class ViewLoaderUnitTest {
 
     assertEquals(1000.0, size.width());
     assertEquals(600.0, size.height());
+  }
+
+  @Test
+  @DisplayName("addApplicationStylesheet gives every scene the shared app stylesheet")
+  void addApplicationStylesheetAddsSharedStylesheet() {
+    Scene scene = mock(Scene.class);
+    when(scene.getStylesheets()).thenReturn(FXCollections.observableArrayList());
+
+    ViewLoader.addApplicationStylesheet(scene);
+
+    assertEquals(1, scene.getStylesheets().size());
+    assertTrue(scene.getStylesheets().get(0).endsWith("app.css"));
+  }
+
+  @Test
+  @DisplayName("the shared app stylesheet resource exists on the classpath")
+  void appStylesheetResourceExists() {
+    assertNotNull(ViewLoader.class.getResource(ViewLoader.APP_STYLESHEET));
   }
 }

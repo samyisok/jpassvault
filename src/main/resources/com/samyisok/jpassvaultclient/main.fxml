@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <!--
    Unlock view.
@@ -26,22 +25,10 @@
    <children>
       <VBox alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <PasswordField fx:id="unlockPassword" maxWidth="224.0" onAction="#unlock" prefHeight="35.0" prefWidth="224.0" promptText="Password" style="-fx-background-color: #efe;">
-               <font>
-                  <Font name="Segoe UI" size="18.0" />
-               </font>
-            </PasswordField>
-            <Button fx:id="unlockButton" mnemonicParsing="false" onAction="#unlock" prefHeight="55.0" prefWidth="133.0" style="-fx-background-color: #dfd;" text="Unlock" textAlignment="CENTER" textFill="#014d0c">
-               <font>
-                  <Font name="Segoe UI" size="20.0" />
-               </font>
-            </Button>
+            <PasswordField fx:id="unlockPassword" maxWidth="224.0" onAction="#unlock" prefHeight="35.0" prefWidth="224.0" promptText="Password" style="-fx-background-color: #efe;" />
+            <Button fx:id="unlockButton" mnemonicParsing="false" onAction="#unlock" prefHeight="55.0" prefWidth="133.0" style="-fx-background-color: #dfd;" text="Unlock" textAlignment="CENTER" textFill="#014d0c" />
          </children>
       </VBox>
-      <Button fx:id="optionsButton" mnemonicParsing="false" onAction="#options" prefHeight="55.0" prefWidth="133.0" style="-fx-background-color: #dfd;" text="Options" textAlignment="CENTER" textFill="#014d0c" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0">
-         <font>
-            <Font name="Segoe UI" size="20.0" />
-         </font>
-      </Button>
+      <Button fx:id="optionsButton" mnemonicParsing="false" onAction="#options" prefHeight="55.0" prefWidth="133.0" style="-fx-background-color: #dfd;" text="Options" textAlignment="CENTER" textFill="#014d0c" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0" />
    </children>
 </AnchorPane>

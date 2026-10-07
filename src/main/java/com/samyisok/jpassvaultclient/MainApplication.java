@@ -15,6 +15,7 @@ public class MainApplication extends Application {
 
   @Override
   public void start(Stage stage) {
+    FontLoader.register();
     stage.addEventHandler(StageActionEvent.STAGE_ACTION,
         appFactory.mainListener()::handle);
     appFactory.stageInit().initialize(stage);
