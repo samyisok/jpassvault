@@ -1,5 +1,12 @@
 # AGENTS.md
 
+## Versioning & Commits
+
+- Bump the project version in `pom.xml` **before every commit**, using Semantic Versioning (breaking change → major, new feature → minor, fix → patch).
+- Keep `CHANGELOG.md` in sync: the top released version heading must match the `pom.xml` version before committing, and the change's entry goes under it.
+- Never commit or tag a mismatch between the `pom.xml` version, the top `CHANGELOG.md` heading, and the release tag — the release workflow fails when the tag and `pom.xml` disagree.
+- A version commit and its annotated tag are pushed together (`git push origin main` then `git push origin vX.Y.Z`); the tag triggers the release pipeline.
+
 ## Build & Run
 
 - Always use the Maven wrapper: `./mvnw <goal>` (do not rely on a system `mvn`).
