@@ -69,8 +69,11 @@ public class RemoteVault implements RemotableVault {
       URI url = new URI((options.getApiUrl() + FILES_PATH));
       Gson g = new Gson();
       String encryptedDb = vaultLoader.getCurrentEncryptedJsonDb();
-      Map<String, String> singletonMap = Map.of("file", encryptedDb);
-      String payload = g.toJson(singletonMap);
+      // Send the keyed change-detection value so the server can store and echo
+      // it; the server cannot recompute it (it never sees the vault key).
+      String checksum = vaultLoader.getVaultEncryptCheckSum();
+      Map<String, String> payloadMap = Map.of("file", encryptedDb, "checksum", checksum);
+      String payload = g.toJson(payloadMap);
 
       postRequest(url.toString(), options.getTokenApi(), payload);
     } catch (IOException | InterruptedException e) {
